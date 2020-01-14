@@ -2,6 +2,7 @@ package TPGUI.Ui;
 import TPGUI.Noyau.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
@@ -34,7 +35,13 @@ public class HomeScreen extends Stage {
         bienListView.setMaxWidth(1000);
         bienListView.setItems(observableBiens);
         bienListView.setCellFactory((ListView<Bien> l) -> new BienTile());
-        scaffold.setCenter(bienListView);
+        Label raw = createMessage("Filter Bar (coming soon)");
+        raw.setBorder(new Border(new BorderStroke(Color.LIGHTGREY, BorderStrokeStyle.SOLID, new CornerRadii(5), BorderWidths.DEFAULT)));
+        HBox filterBar = new HBox(raw);
+        filterBar.setAlignment(Pos.CENTER);
+        VBox homeScreenCenter = new VBox(filterBar, bienListView);
+        homeScreenCenter.setAlignment(Pos.CENTER);
+        scaffold.setCenter(homeScreenCenter);
     }
 
     public Label createMessage(String s) {

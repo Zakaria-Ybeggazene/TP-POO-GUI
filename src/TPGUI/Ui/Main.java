@@ -23,7 +23,15 @@ public class Main extends Application {
         admin.addProp(prop3);
         admin.addProp(prop4);
 
-        Bien bien1 = new Appartement("adr", Wilaya.WILAYA2, 120, prop2, Transaction.VENTE, 4000000., false, "descdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdesc", LocalDateTime.now(), false, 4, true, 1, false, true);
+        Bien bien1 = new Appartement("adr", Wilaya.WILAYA2, 120, prop2, Transaction.VENTE, 4000000., false,
+                "descdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdesc"+
+                        "descdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdesc"+
+                        "descdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdesc"+
+                        "descdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdesc"
+                +"descdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdesc"+
+                        "descdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdesc"+
+                        "descdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdesc",
+                LocalDateTime.now(), false, 4, true, 1, false, true);
         Bien bien2 = new Maison("adr", Wilaya.WILAYA3, 200, prop1, Transaction.VENTE, 10000000., false, "desc", LocalDateTime.now(), false, 9, true, 3, false, true, false, 160);
         Bien bien3 = new Terrain("adr", Wilaya.WILAYA1, 500, prop1, Transaction.VENTE, 20000000., false, "desc", LocalDateTime.now(), false, "stat", 3);
         Bien bien4 = new Appartement("adr", Wilaya.WILAYA3, 100, prop2, Transaction.LOCATION, 40000., true, "desc", LocalDateTime.now(), false, 3, true, 1, false, false);
