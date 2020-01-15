@@ -59,7 +59,7 @@ public class BienTile extends ListCell<Bien> {
             HBox buttonBar = new HBox(contactButton, viewDetailsButton);
             buttonBar.setAlignment(Pos.BASELINE_RIGHT);
             buttonBar.setSpacing(30);
-            tile.setBottom(buttonBar);;
+            tile.setBottom(buttonBar);
             setGraphic(tile);
         }
     }
