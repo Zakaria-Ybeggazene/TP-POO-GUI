@@ -8,8 +8,6 @@ public class ImmoESI {
     private static List<String> listMessages = new LinkedList<>();
     private static Map<String, Object> criteriaMap = new HashMap<>(7);
     private boolean isAuthenticated = false;
-    //private String password = "1mM0€5i_=";
-    private String password = "123";
 
     public ImmoESI() {
         criteriaMap.put("type_transaction", null);
@@ -21,8 +19,8 @@ public class ImmoESI {
         criteriaMap.put("nbpieces_min", -1);
     }
 
-    public void login() {
-        int tries = 3;
+    public void login(String password) {
+        /*int tries = 3;
         Scanner sc = new Scanner(System.in);
         String input;
         while (tries >0 && !isAuthenticated) {
@@ -33,7 +31,11 @@ public class ImmoESI {
             } else tries--;
         }
         if (!isAuthenticated) System.out.println("You ran out of tries, could not authenticate");
-        else System.out.println("You are authenticated as Admin");
+        else System.out.println("You are authenticated as Admin");*/
+        //private String password = "1mM0€5i_=";
+        String password1 = "123";
+        if(password.equals(password1)) isAuthenticated = true;
+        else System.err.println("Wrong Password");
     }
 
     public void logout() {

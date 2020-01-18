@@ -3,6 +3,7 @@ package TPGUI.Ui;
 import TPGUI.Noyau.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +17,7 @@ public class Main extends Application {
         Proprietaire prop3 = new Proprietaire("nom3", "prenom3", "adresse3", "tel3", "mail3");
         Proprietaire prop4 = new Proprietaire("nom4", "prenom4", "adresse4", "tel4", "mail4");
 
-        admin.login();
+        admin.login("123");
 
         admin.addProp(prop1);
         admin.addProp(prop2);
@@ -53,7 +54,6 @@ public class Main extends Application {
         HomeScreen stage = new HomeScreen(admin);
         stage.show();
     }
-
 
     public static void main(String[] args) {
         launch(args);

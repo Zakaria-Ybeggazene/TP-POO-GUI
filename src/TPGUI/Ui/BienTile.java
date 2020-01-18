@@ -1,10 +1,13 @@
 package TPGUI.Ui;
 import TPGUI.Control.DetailsButtonController;
+import TPGUI.Control.ModifyButtonController;
 import TPGUI.Noyau.Bien;
+import TPGUI.Noyau.ImmoESI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -14,7 +17,10 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 public class BienTile extends ListCell<Bien> {
-    public BienTile() {}
+    private ImmoESI model;
+    public BienTile(ImmoESI model) {
+        this.model = model;
+    }
 
     @Override
     protected void updateItem(Bien bien, boolean empty) {
@@ -38,7 +44,7 @@ public class BienTile extends ListCell<Bien> {
             Label price = createMessage(String.format("%.3f DA\n", bien.getPrixFinal()));
             price.setTextFill(Color.WHITE);
             price.setFont(Font.font("Droid Serif", FontWeight.BOLD, 16));
-            price.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE, new CornerRadii(3), new Insets(0))));
+            price.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE, new CornerRadii(3), Insets.EMPTY)));
             VBox right = new VBox(price);
             BorderPane tile = new BorderPane();
             tile.setPadding(new Insets(10));
@@ -47,11 +53,11 @@ public class BienTile extends ListCell<Bien> {
             BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTGREY, new CornerRadii(5), new Insets(5));
             setBackground(new Background(backgroundFill));
             tile.setBorder(new Border(new BorderStroke(Color.LIGHTGREY, BorderStrokeStyle.SOLID, new CornerRadii(5), BorderWidths.DEFAULT)));
-            Button viewDetailsButton = new Button("View Details");
+            Button viewDetailsButton = new Button(model.isAuthenticated() ? "Modifier Bien" : "View Details");
             viewDetailsButton.setTextAlignment(TextAlignment.CENTER);
             viewDetailsButton.setPrefSize(150, 30);
             viewDetailsButton.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-            viewDetailsButton.setOnAction(new DetailsButtonController(bien));
+            viewDetailsButton.setOnAction(model.isAuthenticated() ? new ModifyButtonController() : new DetailsButtonController(bien));
             Button contactButton = new Button("Contact");
             contactButton.setTextAlignment(TextAlignment.CENTER);
             contactButton.setPrefSize(150, 30);
@@ -64,7 +70,7 @@ public class BienTile extends ListCell<Bien> {
         }
     }
 
-    public Label createMessage(String s) {
+    private Label createMessage(String s) {
         Label etiquette = new Label(s);
         etiquette.setAlignment(Pos.CENTER);
         etiquette.setFont(Font.font ("Verdana", 16));
