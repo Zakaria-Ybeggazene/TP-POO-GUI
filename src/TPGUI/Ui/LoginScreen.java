@@ -93,15 +93,14 @@ public class LoginScreen extends Stage {
             layout.getChildren().add(wrongPass);
         }
     }
-    class ProcessService extends Service<Void> {
+    static class ProcessService extends Service<Void> {
         @Override
         protected Task<Void> createTask() {
             return new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    // Computations takes 3 seconds
-                    // Calling Thread.sleep instead of random computation
-                    Thread.sleep(1500);
+                    // Computations takes 0.7 second
+                    Thread.sleep(700);
                     return null;
                 }
             };

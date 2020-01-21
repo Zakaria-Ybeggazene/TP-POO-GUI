@@ -3,19 +3,14 @@ package TPGUI.Ui;
 import TPGUI.Noyau.Bien;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-
-import java.awt.*;
 
 public class DetailsScreen extends Stage {
     private Bien bien;

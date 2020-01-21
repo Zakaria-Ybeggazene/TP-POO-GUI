@@ -5,7 +5,7 @@ public class ImmoESI {
     private static List<Bien> listBiens = new LinkedList<>();
     private static List<Bien> listArchive = new LinkedList<>();
     private static List<Proprietaire> listProprietaires = new LinkedList<>();
-    private static List<String> listMessages = new LinkedList<>();
+    private static List<String> listMessages = new ArrayList<>();
     private static Map<String, Object> criteriaMap = new HashMap<>(7);
     private boolean isAuthenticated = false;
 
@@ -20,19 +20,7 @@ public class ImmoESI {
     }
 
     public void login(String password) {
-        /*int tries = 3;
-        Scanner sc = new Scanner(System.in);
-        String input;
-        while (tries >0 && !isAuthenticated) {
-            System.out.print("password : ");
-            input = sc.next();
-            if(input.compareTo(password) == 0) {
-                isAuthenticated = true;
-            } else tries--;
-        }
-        if (!isAuthenticated) System.out.println("You ran out of tries, could not authenticate");
-        else System.out.println("You are authenticated as Admin");*/
-        //private String password = "1mM0€5i_=";
+        //String password = "1mM0€5i_=";
         String password1 = "123";
         if(password.equals(password1)) isAuthenticated = true;
         else System.err.println("Wrong Password");
@@ -40,7 +28,7 @@ public class ImmoESI {
 
     public void logout() {
         isAuthenticated = false;
-        System.out.println("Déconnecté");
+        System.out.println("Disconnected");
     }
 
     public boolean isAuthenticated() {
@@ -95,7 +83,7 @@ public class ImmoESI {
 
     public boolean removeBien(Bien b, Proprietaire proprietaire) throws NullPointerException {
         if(isAuthenticated) {
-            ImmoESI.getListProprietaires().get(ImmoESI.getListProprietaires().indexOf(proprietaire)).addBien(b);
+            ImmoESI.getListProprietaires().get(ImmoESI.getListProprietaires().indexOf(proprietaire)).removeBien(b);
             return listBiens.remove(b);
         } else {
             System.err.println("Your Should be Authenticated as Admin first");
@@ -178,6 +166,10 @@ public class ImmoESI {
         }
     }
 
+    public static List<Bien> getListArchive() {
+        return listArchive;
+    }
+
     public void afficherArchive() {
         if(isAuthenticated) {
             System.out.println("Liste des Biens archivés :");
@@ -189,6 +181,9 @@ public class ImmoESI {
         } else System.err.println("Your Should be Authenticated as Admin first");
     }
 
+    public static List<String> getListMessages() {
+        return listMessages;
+    }
     public void contacterAdmin() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Laissez nous un message :");

@@ -4,12 +4,15 @@ import TPGUI.Control.AdminLoginController;
 import TPGUI.Noyau.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.*;
 import javafx.scene.text.Font;
@@ -17,9 +20,6 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
-import javafx.util.StringConverter;
-
-import javax.swing.*;
 
 public class HomeScreen extends Stage {
     private ImmoESI model;
@@ -36,37 +36,10 @@ public class HomeScreen extends Stage {
         this.setScene(getNewScene());
     }
 
-    private Label createMessage(String s) {
-        Label etiquette = new Label(s);
-        etiquette.setAlignment(Pos.CENTER);
-        etiquette.setFont(Font.font("Verdana", 16));
-        etiquette.setLineSpacing(3);
-        return etiquette;
-    }
-
-    private HBox buildTopWelcomeMessage() {
-        Label mainMessage = createMessage("Bienvenu dans Immo ESI");
-        mainMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 32));
-        Label descriptionMessage = createMessage("Immo ESI est une application de gestion de biens " +
-                "immobiliers qui met en contact vendeurs et acheteurs.\nDécouvrez les biens existant sur la " +
-                "plateforme et contactez nous pour ajouter les votres !");
-        descriptionMessage.setWrapText(true);
-        TextFlow topMessage = new TextFlow(mainMessage, descriptionMessage);
-        Button adminLoginButton = new Button(model.isAuthenticated() ? "Disconnect" : "Login as\nAdmin");
-        adminLoginButton.setWrapText(true);
-        adminLoginButton.setTextAlignment(TextAlignment.CENTER);
-        adminLoginButton.setPrefSize(model.isAuthenticated() ? 450 : 400, 50);
-        adminLoginButton.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-        adminLoginButton.setOnAction(new AdminLoginController(model, this));
-        HBox topLayer = new HBox(topMessage, adminLoginButton);
-        topLayer.setPadding(new Insets(10));
-        return topLayer;
-    }
-
     public Scene getNewScene() {
         //Creatng Top Welcome Message
         BorderPane scaffold = new BorderPane();
-        HBox topLayer = buildTopWelcomeMessage();
+        HBox topLayer = buildTopLayer();
         scaffold.setTop(topLayer);
         // Creating BienTiles
         ObservableList<Bien> observableBiens = FXCollections.observableList(ImmoESI.getListBiens());
@@ -74,14 +47,40 @@ public class HomeScreen extends Stage {
         bienListView.setMaxWidth(1000);
         bienListView.setPrefWidth(1000);
         bienListView.setItems(observableBiens);
-        bienListView.setCellFactory((ListView<Bien> l) -> new BienTile(model));
+        bienListView.setCellFactory((ListView<Bien> l) -> new BienTile(model, this));
         ToolBar filterBar = buildFilterBar();
         filterBar.setOrientation(Orientation.VERTICAL);
         HBox homeScreenCenter = new HBox(filterBar, bienListView);
         homeScreenCenter.setAlignment(Pos.CENTER);
+        homeScreenCenter.setMaxSize(1000, -1);
         homeScreenCenter.setPrefSize(1000, -1);
         scaffold.setCenter(homeScreenCenter);
-        return new Scene(scaffold, 1080, 520);
+        scaffold.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+        return isMaximized() ? new Scene(scaffold, 1280, 800) : new Scene(scaffold, 1080, 520);
+    }
+
+    private HBox buildTopLayer() {
+        Pane top;
+        if(!model.isAuthenticated()) {
+            Label mainMessage = createMessage("Bienvenu dans Immo ESI");
+            mainMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 32));
+            Label descriptionMessage = createMessage("Immo ESI est une application de gestion de biens " +
+                    "immobiliers qui met en contact vendeurs et acheteurs.\nDécouvrez les biens existant sur la " +
+                    "plateforme et contactez nous pour ajouter les votres !");
+            descriptionMessage.setWrapText(true);
+            TextFlow topMessage = new TextFlow(mainMessage, descriptionMessage);
+            top = topMessage;
+        } else {
+            HBox topAdminTools = new HBox(buildSettingsButton(), buildStdTopButton("View Prop List"),
+                    buildStdTopButton("View Archive List"), buildStdTopButton("View Messages List"),
+                    buildStdTopButton("Add Bien"));
+            topAdminTools.setSpacing(10);
+            top = topAdminTools;
+        }
+        HBox topLayer = new HBox(top, buildAdminLoginButton());
+        topLayer.setSpacing(model.isAuthenticated() ? isMaximized() ? 250 : 80 : 10);
+        topLayer.setPadding(model.isAuthenticated()? new Insets(10, 10, 43, 10) : new Insets(10));
+        return topLayer;
     }
 
     private ToolBar buildFilterBar() {
@@ -121,8 +120,66 @@ public class HomeScreen extends Stage {
         filterButton.setFont(Font.font("Roboto", FontWeight.BOLD, 16));
         filterButton.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE, new CornerRadii(3), Insets.EMPTY)));
         filterButton.setTextFill(Color.WHITE);
+        filterButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                filterButton.setBackground(new Background(new BackgroundFill(Color.DARKBLUE, new CornerRadii(3), Insets.EMPTY)));
+            }
+        });
+        filterButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                filterButton.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE, new CornerRadii(3), Insets.EMPTY)));
+            }
+        });
+        filterButton.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                filterButton.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, new CornerRadii(2), new BorderWidths(3))));
+            }
+        });
+        filterButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                filterButton.setBorder(Border.EMPTY);
+            }
+        });
         ToolBar filterBar = new ToolBar(transLabel, typeTrans, wilayaLabel, wilaya, prixMaxLabel, prixMaxSpinner, prixMinLabel, prixMinSpinner, bienLabel, typeBien, surfaceMinLabel, surfaceMinSpinner, nbMinPiecesLabel, nbMinPiecesSpinner, filterButton);
         filterBar.setOrientation(Orientation.VERTICAL);
         return filterBar;
+    }
+
+    private Button buildAdminLoginButton() {
+        Button adminLoginButton = new Button(model.isAuthenticated() ? "Disconnect" : "Login as\nAdmin");
+        adminLoginButton.setWrapText(true);
+        adminLoginButton.setTextAlignment(TextAlignment.CENTER);
+        adminLoginButton.setPrefSize(model.isAuthenticated() ? 100 : 300, 50);
+        adminLoginButton.setMinSize(model.isAuthenticated() ? 100 : 100, 50);
+        adminLoginButton.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+        adminLoginButton.setOnAction(new AdminLoginController(model, this));
+        return adminLoginButton;
+    }
+
+    private Button buildSettingsButton() {
+        Image settingsIcon = new Image(getClass().getResourceAsStream("../../settings.png"), 40, 40, true, true);
+        Button settingButton = new Button();
+        settingButton.setGraphic(new ImageView(settingsIcon));
+        settingButton.setPrefSize(50, 50);
+        return settingButton;
+    }
+
+    private Button buildStdTopButton(String s) {
+        Button button = new Button(s);
+        button.setPrefSize(200, 50);
+        button.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+        return button;
+    }
+
+    private Label createMessage(String s) {
+        Label etiquette = new Label(s);
+        etiquette.setAlignment(Pos.CENTER);
+        etiquette.setFont(Font.font("Verdana", 16));
+        etiquette.setLineSpacing(3);
+        return etiquette;
     }
 }
