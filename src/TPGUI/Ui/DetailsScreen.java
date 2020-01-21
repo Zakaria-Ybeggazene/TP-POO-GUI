@@ -1,10 +1,13 @@
 package TPGUI.Ui;
 
+import TPGUI.Control.AdminLoginController;
+
 import TPGUI.Noyau.Bien;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.ScrollPane;
@@ -12,14 +15,16 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 import java.awt.*;
 
 public class DetailsScreen extends Stage {
+	
     private Bien bien;
-
+    
     public DetailsScreen(Bien bien) {
         this.bien = bien;
         this.setTitle(bien.getNatureTransaction().getNomTrans() + " " + bien.getClass().getSimpleName() + " " +
@@ -44,8 +49,24 @@ public class DetailsScreen extends Stage {
         price.setTextFill(javafx.scene.paint.Color.WHITE);
         price.setFont(Font.font("Droid Serif", FontWeight.BOLD, 16));
         price.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE, new CornerRadii(3), new Insets(0))));
+        Label adresse = createMessage("Adresse exacte :\n"+bien.getAdresseExacte());
+        adresse.setFont(Font.font("Droid Serif",FontWeight.BOLD,16));
+        Label superficie = createMessage("superficie :\n"+bien.getSuperficie());
+        superficie.setFont(Font.font("Droid Serif",FontWeight.BOLD,16));
+        //adresse.setBackground(new Background(new BackgroundFill(Color.ALICEBLUE,new CornerRadii(3),new Insets(0))));
+        Button contactButton = new Button("Contact");
+        contactButton.setTextAlignment(TextAlignment.CENTER);
+        contactButton.setPrefSize(100, 30);
+        contactButton.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+        contactButton.setWrapText(true);
+        contactButton.setPadding(new Insets(10));
+        //contactButton.setAlignment(Pos.TOP_RIGHT);
+        HBox topLayer = new HBox(contactButton);
+        //topLayer.setPadding(new Insets(0));
+        topLayer.setAlignment(Pos.BASELINE_RIGHT);
         // ADD OTHER DETAILS SAMY NEHLIL MOULOUD
-        VBox details = new VBox(typeBien, typeTrans, price, description);
+        VBox details = new VBox(typeBien, typeTrans, price, description,adresse,superficie);
+        scaffold.setTop(topLayer);
         details.setPrefWidth(700);
         details.setSpacing(10);
         scrollPane.setContent(details);

@@ -1,6 +1,8 @@
 package TPGUI.Ui;
 import TPGUI.Control.DetailsButtonController;
+
 import TPGUI.Control.ModifyButtonController;
+import TPGUI.Control.ContactButtonController;
 import TPGUI.Noyau.Bien;
 import TPGUI.Noyau.ImmoESI;
 import javafx.event.ActionEvent;
@@ -62,6 +64,8 @@ public class BienTile extends ListCell<Bien> {
             contactButton.setTextAlignment(TextAlignment.CENTER);
             contactButton.setPrefSize(150, 30);
             contactButton.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+            //new
+            contactButton.setOnAction( new ContactButtonController(bien));
             HBox buttonBar = new HBox(contactButton, viewDetailsButton);
             buttonBar.setAlignment(Pos.BASELINE_RIGHT);
             buttonBar.setSpacing(30);

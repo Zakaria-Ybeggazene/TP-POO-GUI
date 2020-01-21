@@ -15,6 +15,7 @@ import javafx.scene.*;
 import javafx.scene.text.Font;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 import javafx.util.StringConverter;
@@ -31,6 +32,7 @@ public class HomeScreen extends Stage {
         this.setResizable(true);
         this.setMinWidth(1080);
         this.setMinHeight(520);
+        this.getIcons().add(new Image(("file:home.png")));
         BorderPane scaffold = new BorderPane();
         scaffold.setPadding(new Insets(10));
         this.setScene(getNewScene());
