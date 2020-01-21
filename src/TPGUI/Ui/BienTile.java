@@ -3,6 +3,7 @@ import TPGUI.Control.ArchiveBienButtonController;
 import TPGUI.Control.DetailsButtonController;
 import TPGUI.Control.ModifyButtonController;
 import TPGUI.Control.RemoveBienButtonController;
+import TPGUI.Control.ContactButtonController;
 import TPGUI.Noyau.Bien;
 import TPGUI.Noyau.ImmoESI;
 import javafx.geometry.Insets;
@@ -40,6 +41,7 @@ public class BienTile extends ListCell<Bien> {
             detailsOrModifyButton.setOnAction(model.isAuthenticated() ? new ModifyButtonController()
                     : new DetailsButtonController(bien));
             Button contactButton = buildTileButton("Contact");
+            contactButton.setOnAction( new ContactButtonController(bien));
             Button removeBienButton = buildTileButton("Remove Bien");
             removeBienButton.setOnAction(new RemoveBienButtonController(bien, homeScreen));
             Button archiveBienButton = buildTileButton("Archive Bien");

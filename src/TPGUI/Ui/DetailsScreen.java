@@ -1,22 +1,24 @@
 package TPGUI.Ui;
 
+import TPGUI.Control.AdminLoginController;
+
 import TPGUI.Noyau.Bien;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class DetailsScreen extends Stage {
-    private Bien bien;
 
     public DetailsScreen(Bien bien) {
-        this.bien = bien;
         this.setTitle(bien.getNatureTransaction().getNomTrans() + " " + bien.getClass().getSimpleName() + " " +
                 bien.getWilaya().toString());
         this.setResizable(false);
@@ -39,15 +41,27 @@ public class DetailsScreen extends Stage {
         price.setTextFill(javafx.scene.paint.Color.WHITE);
         price.setFont(Font.font("Droid Serif", FontWeight.BOLD, 16));
         price.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE, new CornerRadii(3), new Insets(0))));
-        // ADD OTHER DETAILS SAMY NEHLIL MOULOUD
-        VBox details = new VBox(typeBien, typeTrans, price, description);
+        Label adresse = createMessage("Adresse exacte :\n"+bien.getAdresseExacte());
+        adresse.setFont(Font.font("Verdana",FontWeight.BOLD,16));
+        Label superficie = createMessage("Superficie :\n"+bien.getSuperficie()+" m²");
+        superficie.setFont(Font.font("Verdana",FontWeight.BOLD,16));
+        Button contactButton = new Button("Contact");
+        contactButton.setTextAlignment(TextAlignment.CENTER);
+        contactButton.setPrefSize(100, 30);
+        contactButton.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+        contactButton.setWrapText(true);
+        contactButton.setPadding(new Insets(10));
+        HBox topLayer = new HBox(contactButton);
+        topLayer.setAlignment(Pos.BASELINE_RIGHT);
+        VBox details = new VBox(typeBien, typeTrans, price, description,adresse,superficie);
+        scaffold.setTop(topLayer);
         details.setPrefWidth(700);
         details.setSpacing(10);
         scrollPane.setContent(details);
         scrollPane.setPadding(new Insets(20));
     }
 
-    public Label createMessage(String s) {
+    private Label createMessage(String s) {
         Label etiquette = new Label(s);
         etiquette.setAlignment(Pos.CENTER);
         etiquette.setFont(Font.font("Verdana", 16));

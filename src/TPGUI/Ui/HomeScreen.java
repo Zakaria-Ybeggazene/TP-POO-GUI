@@ -31,6 +31,7 @@ public class HomeScreen extends Stage {
         this.setResizable(true);
         this.setMinWidth(1080);
         this.setMinHeight(520);
+        this.getIcons().add(new Image(("file:home.png")));
         BorderPane scaffold = new BorderPane();
         scaffold.setPadding(new Insets(10));
         this.setScene(getNewScene());

@@ -184,6 +184,7 @@ public class ImmoESI {
     public static List<String> getListMessages() {
         return listMessages;
     }
+
     public void contacterAdmin() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Laissez nous un message :");
@@ -191,15 +192,24 @@ public class ImmoESI {
         listMessages.add(message);
     }
 
-    public void afficherListMessages() {
-        if(isAuthenticated) {
+    public void contacterAdmin(String message) {
+        listMessages.add(message);
+    }
+    public static void afficherListMessages() {
+        /*if(isAuthenticated) {
             int i = 1;
             System.out.println("Liste des Messages de Clients :");
             for (String message : listMessages) {
                 System.out.println("Message "+i+" :\n"+message);
                 i++;
             }
-        } else System.err.println("Your Should be Authenticated as Admin first");
+        } else System.err.println("Your Should be Authenticated as Admin first");*/
+        int i = 1;
+        System.out.println("Liste des Messages de Clients :");
+        for (String message : listMessages) {
+            System.out.println("Message "+i+" :\n"+message);
+            i++;
+        }
     }
 
     public void filter(Transaction transaction,
