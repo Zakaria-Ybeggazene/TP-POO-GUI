@@ -1,6 +1,7 @@
 package TPGUI.Ui;
 
 import TPGUI.Noyau.ImmoESI;
+
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import javafx.collections.FXCollections;
@@ -19,7 +20,7 @@ public class ListMessagesScreen extends Stage {
 		BorderPane scaffold = new BorderPane();
 		ObservableList<String> observableMessages = FXCollections.observableList(ImmoESI.getListMessages());
 		ListView<String> MessagesListView = new ListView<>();
-		MessagesListView.setMaxWidth(700);
+		MessagesListView.setMaxWidth(1000);
 		MessagesListView.setPrefWidth(700);
 		MessagesListView.setItems(observableMessages);
 		MessagesListView.setCellFactory((ListView<String> l) -> new MessageCell());
@@ -27,5 +28,3 @@ public class ListMessagesScreen extends Stage {
 		this.setScene(new Scene(scaffold, 800, 400));
 	}
 }
-
-

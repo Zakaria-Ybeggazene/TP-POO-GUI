@@ -2,7 +2,9 @@ package TPGUI.Ui;
 
 import TPGUI.Control.AdminLoginController;
 import TPGUI.Control.FilterButtonController;
+import TPGUI.Control.ViewArchiveButtonController;
 import TPGUI.Control.ViewMessagesButtonController;
+import TPGUI.Control.ViewPropButtonController;
 import TPGUI.Noyau.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -76,8 +78,8 @@ public class HomeScreen extends Stage {
             TextFlow topMessage = new TextFlow(mainMessage, descriptionMessage);
             top = topMessage;
         } else {
-            HBox topAdminTools = new HBox(buildSettingsButton(), buildStdTopButton("View Prop List", null),
-                    buildStdTopButton("View Archive List", null), buildStdTopButton("View Messages List", new ViewMessagesButtonController()),
+            HBox topAdminTools = new HBox(buildSettingsButton(), buildStdTopButton("View Prop List", new ViewPropButtonController()),
+                    buildStdTopButton("View Archive List", new ViewArchiveButtonController()), buildStdTopButton("View Messages List", new ViewMessagesButtonController()),
                     buildStdTopButton("Add Bien", null));
             
             topAdminTools.setSpacing(10);

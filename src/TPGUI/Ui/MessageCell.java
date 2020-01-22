@@ -1,5 +1,8 @@
 package TPGUI.Ui;
 
+import java.time.LocalDateTime;
+
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -19,9 +22,12 @@ public class MessageCell extends ListCell<String> {
 			setBackground(new Background(backgroundFill));
 			tile.setBorder(new Border(new BorderStroke(Color.LIGHTGREY, BorderStrokeStyle.SOLID, new CornerRadii(5),
 					BorderWidths.DEFAULT)));
-			Label intro = createMessage("MESSAGE :");
+			Label intro = createMessage("Message :");
 			Label messageDuClient = createMessage(message);
-			VBox layer = new VBox(intro, messageDuClient);
+			Label date = createMessage("\t\t\t\t\t\t\t\t\t   Ajouté le "
+					+ LocalDateTime.now().getDayOfMonth() + "/" + LocalDateTime.now().getMonthValue() + "/"
+					+ LocalDateTime.now().getYear() + " a " + LocalDateTime.now().getHour()+":"+LocalDateTime.now().getMinute());
+			VBox layer = new VBox(intro, messageDuClient, date);
 			tile.setCenter(layer);
 			setGraphic(tile);
 		}
