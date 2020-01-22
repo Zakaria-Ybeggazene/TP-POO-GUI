@@ -1,6 +1,7 @@
 package TPGUI.Ui;
 
 import TPGUI.Control.AdminLoginController;
+import TPGUI.Control.FilterButtonController;
 import TPGUI.Noyau.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,22 +35,23 @@ public class HomeScreen extends Stage {
         this.getIcons().add(new Image(("file:home.png")));
         BorderPane scaffold = new BorderPane();
         scaffold.setPadding(new Insets(10));
-        this.setScene(getNewScene());
+        ObservableList<Bien> observableBiens = FXCollections.observableList(ImmoESI.getListBiens());
+        this.setScene(getNewScene(observableBiens));
     }
 
-    public Scene getNewScene() {
+    public Scene getNewScene(ObservableList<Bien> observableBiens) {
         //Creatng Top Welcome Message
         BorderPane scaffold = new BorderPane();
         HBox topLayer = buildTopLayer();
         scaffold.setTop(topLayer);
         // Creating BienTiles
-        ObservableList<Bien> observableBiens = FXCollections.observableList(ImmoESI.getListBiens());
+        //ObservableList<Bien> observableBiens = FXCollections.observableList(ImmoESI.getListBiens());
         ListView<Bien> bienListView = new ListView<>();
         bienListView.setMaxWidth(1000);
         bienListView.setPrefWidth(1000);
         bienListView.setItems(observableBiens);
         bienListView.setCellFactory((ListView<Bien> l) -> new BienTile(model, this));
-        ToolBar filterBar = buildFilterBar();
+        ToolBar filterBar = buildFilterBar(observableBiens);
         filterBar.setOrientation(Orientation.VERTICAL);
         HBox homeScreenCenter = new HBox(filterBar, bienListView);
         homeScreenCenter.setAlignment(Pos.CENTER);
@@ -84,7 +86,7 @@ public class HomeScreen extends Stage {
         return topLayer;
     }
 
-    private ToolBar buildFilterBar() {
+    private ToolBar buildFilterBar(ObservableList<Bien> observableBiens) {
         Label transLabel = createMessage("Type de Transaction");
         transLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
         ObservableList<Transaction> observableListTrans = FXCollections.observableArrayList(Transaction.values());
@@ -115,7 +117,7 @@ public class HomeScreen extends Stage {
         Label nbMinPiecesLabel = createMessage("Nombre min de pieces");
         nbMinPiecesLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
         Spinner<Integer> nbMinPiecesSpinner = new Spinner<>();
-        nbMinPiecesSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 30, 1, 1));
+        nbMinPiecesSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 30, 1, 1));
         Button filterButton = new Button("Filter");
         filterButton.setPrefSize(171, 35);
         filterButton.setFont(Font.font("Roboto", FontWeight.BOLD, 16));
@@ -145,7 +147,30 @@ public class HomeScreen extends Stage {
                 filterButton.setBorder(Border.EMPTY);
             }
         });
-        ToolBar filterBar = new ToolBar(transLabel, typeTrans, wilayaLabel, wilaya, prixMaxLabel, prixMaxSpinner, prixMinLabel, prixMinSpinner, bienLabel, typeBien, surfaceMinLabel, surfaceMinSpinner, nbMinPiecesLabel, nbMinPiecesSpinner, filterButton);
+        filterButton.setOnAction(new FilterButtonController(this,
+                observableBiens,
+                typeTrans,
+                wilaya,
+                prixMaxSpinner,
+                prixMinSpinner,
+                typeBien,
+                surfaceMinSpinner,
+                nbMinPiecesSpinner));
+        ToolBar filterBar = new ToolBar(transLabel,
+                typeTrans,
+                wilayaLabel,
+                wilaya,
+                prixMaxLabel,
+                prixMaxSpinner,
+                prixMinLabel,
+                prixMinSpinner,
+                bienLabel,
+                typeBien,
+                surfaceMinLabel,
+                surfaceMinSpinner,
+                nbMinPiecesLabel,
+                nbMinPiecesSpinner,
+                filterButton);
         filterBar.setOrientation(Orientation.VERTICAL);
         return filterBar;
     }

@@ -3,6 +3,7 @@ package TPGUI.Control;
 import TPGUI.Noyau.Bien;
 import TPGUI.Noyau.ImmoESI;
 import TPGUI.Ui.HomeScreen;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
@@ -20,6 +21,6 @@ public class ArchiveBienButtonController implements EventHandler<ActionEvent> {
         ImmoESI.getListArchive().add(bien);
         ImmoESI.getListProprietaires().get(ImmoESI.getListProprietaires().indexOf(bien.getProprietaire())).removeBien(bien);
         ImmoESI.getListBiens().remove(bien);
-        homeScreen.setScene(homeScreen.getNewScene());
+        homeScreen.setScene(homeScreen.getNewScene(FXCollections.observableList(ImmoESI.getListBiens())));
     }
 }

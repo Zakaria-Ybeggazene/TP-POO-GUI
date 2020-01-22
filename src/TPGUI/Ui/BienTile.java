@@ -37,7 +37,7 @@ public class BienTile extends ListCell<Bien> {
             setBackground(new Background(backgroundFill));
             tile.setBorder(new Border(new BorderStroke(Color.LIGHTGREY, BorderStrokeStyle.SOLID,
                     new CornerRadii(5), BorderWidths.DEFAULT)));
-            Button detailsOrModifyButton = buildTileButton(model.isAuthenticated() ? "Modifier Bien" : "View Details");
+            Button detailsOrModifyButton = buildTileButton(model.isAuthenticated() ? "Modify Bien" : "View Details");
             detailsOrModifyButton.setOnAction(model.isAuthenticated() ? new ModifyButtonController()
                     : new DetailsButtonController(bien));
             Button contactButton = buildTileButton("Contact");

@@ -1,6 +1,7 @@
 package TPGUI.Ui;
 
 import TPGUI.Noyau.ImmoESI;
+import javafx.collections.FXCollections;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -79,7 +80,7 @@ public class LoginScreen extends Stage {
             layout.getChildren().add(correctPass);
             service.setOnSucceeded(e -> {
                 this.close();
-                homeScreen.setScene(homeScreen.getNewScene());
+                homeScreen.setScene(homeScreen.getNewScene(FXCollections.observableList(ImmoESI.getListBiens())));
                 homeScreen.show();
                 service.reset();
             });
