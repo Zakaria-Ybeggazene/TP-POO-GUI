@@ -1,6 +1,7 @@
 package TPGUI.Ui;
 
 import TPGUI.Noyau.ImmoESI;
+
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -66,7 +67,7 @@ public class LoginScreen extends Stage {
     }
 
     private void loginGraphic(PasswordField passwordField, VBox layout) {
-        Service service = new ProcessService();
+        Service<Void> service = new ProcessService();
         if(!service.isRunning()) {
             service.start();
         }

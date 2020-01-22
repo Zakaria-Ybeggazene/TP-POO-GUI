@@ -1,13 +1,13 @@
 package TPGUI.Ui;
 
 import TPGUI.Noyau.Bien;
+
 import TPGUI.Control.*;
 import javafx.scene.control.Label;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;

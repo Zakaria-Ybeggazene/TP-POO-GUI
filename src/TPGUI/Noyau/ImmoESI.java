@@ -195,7 +195,7 @@ public class ImmoESI {
     public void contacterAdmin(String message) {
         listMessages.add(message);
     }
-    public static void afficherListMessages() {
+    public void afficherListMessages() {
         /*if(isAuthenticated) {
             int i = 1;
             System.out.println("Liste des Messages de Clients :");

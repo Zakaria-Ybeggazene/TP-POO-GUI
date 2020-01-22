@@ -138,6 +138,10 @@ public class Appartement extends Habitable {
         return prixFinal;
     }
 
+    public int getEtage() {
+    	return this.etage;
+    }
+    
     @Override
     public int getNbPieces() {
         return nbPieces;
