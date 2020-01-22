@@ -2,9 +2,11 @@ package TPGUI.Ui;
 
 import TPGUI.Control.AdminLoginController;
 import TPGUI.Control.FilterButtonController;
+import TPGUI.Control.ViewMessagesButtonController;
 import TPGUI.Noyau.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.image.Image;
@@ -68,17 +70,19 @@ public class HomeScreen extends Stage {
             Label mainMessage = createMessage("Bienvenu dans Immo ESI");
             mainMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 32));
             Label descriptionMessage = createMessage("Immo ESI est une application de gestion de biens " +
-                    "immobiliers qui met en contact vendeurs et acheteurs.\nDécouvrez les biens existant sur la " +
+                    "immobiliers qui met en contact vendeurs et acheteurs.\nDecouvrez les biens existant sur la " +
                     "plateforme et contactez nous pour ajouter les votres !");
             descriptionMessage.setWrapText(true);
             TextFlow topMessage = new TextFlow(mainMessage, descriptionMessage);
             top = topMessage;
         } else {
-            HBox topAdminTools = new HBox(buildSettingsButton(), buildStdTopButton("View Prop List"),
-                    buildStdTopButton("View Archive List"), buildStdTopButton("View Messages List"),
-                    buildStdTopButton("Add Bien"));
+            HBox topAdminTools = new HBox(buildSettingsButton(), buildStdTopButton("View Prop List", null),
+                    buildStdTopButton("View Archive List", null), buildStdTopButton("View Messages List", new ViewMessagesButtonController()),
+                    buildStdTopButton("Add Bien", null));
+            
             topAdminTools.setSpacing(10);
             top = topAdminTools;
+            
         }
         HBox topLayer = new HBox(top, buildAdminLoginButton());
         topLayer.setSpacing(model.isAuthenticated() ? isMaximized() ? 250 : 80 : 10);
@@ -194,10 +198,11 @@ public class HomeScreen extends Stage {
         return settingButton;
     }
 
-    private Button buildStdTopButton(String s) {
+    private Button buildStdTopButton(String s, EventHandler<ActionEvent> controller) {
         Button button = new Button(s);
         button.setPrefSize(200, 50);
         button.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+        button.setOnAction(controller);
         return button;
     }
 

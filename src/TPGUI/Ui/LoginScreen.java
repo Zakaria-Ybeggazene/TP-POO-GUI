@@ -67,7 +67,7 @@ public class LoginScreen extends Stage {
     }
 
     private void loginGraphic(PasswordField passwordField, VBox layout) {
-        Service service = new ProcessService();
+        Service<Void> service = new ProcessService();
         if(!service.isRunning()) {
             service.start();
         }
