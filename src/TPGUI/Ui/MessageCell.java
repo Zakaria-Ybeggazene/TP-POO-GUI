@@ -15,7 +15,7 @@ public class MessageCell extends ListCell<String> {
 	protected void updateItem(String message, boolean empty) {
 		super.updateItem(message, empty);
 		if (message != null) {
-			// Building BienTile (ListCell)
+			// Building MessageCell (ListCell)
 			BorderPane tile = new BorderPane();
 			tile.setPadding(new Insets(10));
 			BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTGREY, new CornerRadii(5), new Insets(5));
@@ -24,10 +24,7 @@ public class MessageCell extends ListCell<String> {
 					BorderWidths.DEFAULT)));
 			Label intro = createMessage("Message :");
 			Label messageDuClient = createMessage(message);
-			Label date = createMessage("\t\t\t\t\t\t\t\t\t   Ajouté le "
-					+ LocalDateTime.now().getDayOfMonth() + "/" + LocalDateTime.now().getMonthValue() + "/"
-					+ LocalDateTime.now().getYear() + " a " + LocalDateTime.now().getHour()+":"+LocalDateTime.now().getMinute());
-			VBox layer = new VBox(intro, messageDuClient, date);
+			VBox layer = new VBox(intro, messageDuClient);
 			tile.setCenter(layer);
 			setGraphic(tile);
 		}

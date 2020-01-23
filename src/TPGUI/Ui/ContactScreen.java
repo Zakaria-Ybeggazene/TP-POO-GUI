@@ -16,6 +16,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.time.LocalDateTime;
+
 public class ContactScreen extends Stage {
 
 	public ContactScreen(Bien b) {
@@ -28,10 +30,10 @@ public class ContactScreen extends Stage {
 		this.setY(200);
 		BorderPane scaffold = new BorderPane();
 		this.setScene(new Scene(scaffold, 800, 400));
-		Label message1 = createMessage(b.getNatureTransaction().getNomTrans() + " " + b.getClass().getSimpleName()
-				+ " " + b.getWilaya().toString());
+		Label message1 = createMessage(b.getIdentifiant()+" "+b.getNatureTransaction().getNomTrans()
+				+" " +b.getClass().getSimpleName()+" "+ b.getWilaya().toString());
 		message1.setFont(Font.font("Verdana",FontWeight.BOLD,16));
-		Label message2= createMessage("NOUS CONTACTER:");
+		Label message2= createMessage("Contact us : ");
 		message2.setFont(Font.font("Verdana",FontWeight.BOLD,16));
 		HBox topLayout = new HBox(message1);
 		topLayout.setPrefSize(30, 30);
@@ -43,17 +45,14 @@ public class ContactScreen extends Stage {
 		Label tel = createMessage("Tel : " + b.getProprietaire().getTel());
 		VBox infosProp = new VBox(nom, prenom, adresse, email, tel);// deuxième composant
 		TextArea messageToAdmin = new TextArea();
-		messageToAdmin.setEditable(true);
 		messageToAdmin.setText("");
 		messageToAdmin.setWrapText(true);
 		Button sendMessageButton = new Button("Send");
 		sendMessageButton.setTextAlignment(TextAlignment.CENTER);
 		sendMessageButton.setPrefSize(90, 30);
 		sendMessageButton.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-		VBox space = new VBox();
-		space.setPrefSize(0,10);
 		HBox contact = new HBox(message2);
-		VBox contactAdmin = new VBox(contact,space, messageToAdmin,sendMessageButton);// dernier composant
+		VBox contactAdmin = new VBox(contact, messageToAdmin, sendMessageButton);// dernier composant
 		contactAdmin.setMaxSize(400, 400);
 		contactAdmin.setSpacing(30);
 		infosProp.setPrefWidth(700);

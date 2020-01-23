@@ -78,8 +78,10 @@ public class HomeScreen extends Stage {
             TextFlow topMessage = new TextFlow(mainMessage, descriptionMessage);
             top = topMessage;
         } else {
-            HBox topAdminTools = new HBox(buildSettingsButton(), buildStdTopButton("View Prop List", new ViewPropButtonController()),
-                    buildStdTopButton("View Archive List", new ViewArchiveButtonController()), buildStdTopButton("View Messages List", new ViewMessagesButtonController()),
+            HBox topAdminTools = new HBox(buildSettingsButton(),
+                    buildStdTopButton("View Prop List", new ViewPropButtonController()),
+                    buildStdTopButton("View Archive List", new ViewArchiveButtonController()),
+                    buildStdTopButton("View Messages List", new ViewMessagesButtonController()),
                     buildStdTopButton("Add Bien", null));
             
             topAdminTools.setSpacing(10);
@@ -127,24 +129,28 @@ public class HomeScreen extends Stage {
         Button filterButton = new Button("Filter");
         filterButton.setPrefSize(171, 35);
         filterButton.setFont(Font.font("Roboto", FontWeight.BOLD, 16));
-        filterButton.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE, new CornerRadii(3), Insets.EMPTY)));
+        filterButton.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE,
+                new CornerRadii(3), Insets.EMPTY)));
         filterButton.setTextFill(Color.WHITE);
         filterButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                filterButton.setBackground(new Background(new BackgroundFill(Color.DARKBLUE, new CornerRadii(3), Insets.EMPTY)));
+                filterButton.setBackground(new Background(new BackgroundFill(Color.DARKBLUE,
+                        new CornerRadii(3), Insets.EMPTY)));
             }
         });
         filterButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                filterButton.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE, new CornerRadii(3), Insets.EMPTY)));
+                filterButton.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE,
+                        new CornerRadii(3), Insets.EMPTY)));
             }
         });
         filterButton.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                filterButton.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, new CornerRadii(2), new BorderWidths(3))));
+                filterButton.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID,
+                        new CornerRadii(2), new BorderWidths(3))));
             }
         });
         filterButton.setOnMouseReleased(new EventHandler<MouseEvent>() {

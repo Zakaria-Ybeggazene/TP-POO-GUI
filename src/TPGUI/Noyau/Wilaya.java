@@ -1,8 +1,8 @@
 package TPGUI.Noyau;
 public enum Wilaya {
-    WILAYA1(100000),
-    WILAYA2(30000),
-    WILAYA3(60000);
+    ALGER(100000),
+    TIZIOUZOU(30000),
+    BEJAIA(60000);
 
     private double prixMetreCarre;
 

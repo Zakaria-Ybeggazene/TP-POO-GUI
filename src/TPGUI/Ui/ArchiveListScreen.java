@@ -13,10 +13,8 @@ public class ArchiveListScreen extends Stage {
 	public ArchiveListScreen() {
 		this.setTitle("Archive");
 		this.setResizable(false);
-		this.setMaxWidth(800);
+		this.setMaxWidth(996);
 		this.setMaxHeight(400);
-		this.setX(350);
-		this.setY(200);
 		BorderPane scaffold = new BorderPane();
 		ObservableList<Bien> observableArchive = FXCollections.observableList(ImmoESI.getListArchive());
 		ListView<Bien> ArchiveListView = new ListView<>();
@@ -25,6 +23,6 @@ public class ArchiveListScreen extends Stage {
 		ArchiveListView.setItems(observableArchive);
 		ArchiveListView.setCellFactory((ListView<Bien> l) -> new ArchiveBienCell());
 		scaffold.setCenter(ArchiveListView);
-		this.setScene(new Scene(scaffold, 800, 400));
+		this.setScene(new Scene(scaffold, 996, 400));
 	}
 }

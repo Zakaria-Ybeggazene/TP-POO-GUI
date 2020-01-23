@@ -23,7 +23,7 @@ public class PropCell extends ListCell<Proprietaire> {
 	protected void updateItem(Proprietaire prop, boolean empty) {
 		super.updateItem(prop, empty);
 		if (prop != null) {
-			// Building BienTile (ListCell)
+			// Building PropCell (ListCell)
 			BorderPane tile = new BorderPane();
 			tile.setPadding(new Insets(10));
 			tile.setLeft(buildLeftOfTile(prop));
@@ -37,42 +37,32 @@ public class PropCell extends ListCell<Proprietaire> {
 	}
 
 	private VBox buildLeftOfTile(Proprietaire prop) {
-		Label nom = createMessage("NOM :\n" + prop.getNom());
+		Label nom = createMessage("NOM : " + prop.getNom());
 		nom.setFont(Font.font("Montserrat", FontWeight.BOLD, 16));
-		nom.setTextOverrun(OverrunStyle.ELLIPSIS);
-		nom.setEllipsisString(" ...");
-		nom.setWrapText(true);
-		nom.setMaxHeight(70);
-		Label prenom = createMessage("PRENOM :\n" + prop.getPrenom());
+		Label prenom = createMessage("PRENOM : " + prop.getPrenom());
 		prenom.setFont(Font.font("Montserrat", FontWeight.BOLD, 16));
-		prenom.setTextOverrun(OverrunStyle.ELLIPSIS);
-		prenom.setEllipsisString(" ...");
-		prenom.setWrapText(true);
-		prenom.setMaxHeight(70);
 		Label adresse = createMessage("ADRESSE :\n" + prop.getAdresse());
 		adresse.setFont(Font.font("Montserrat", FontWeight.BOLD, 16));
-		adresse.setTextOverrun(OverrunStyle.ELLIPSIS);
-		adresse.setEllipsisString(" ...");
-		adresse.setWrapText(true);
-		adresse.setMaxHeight(70);
 		VBox left = new VBox(nom, prenom, adresse);
+		left.setSpacing(10);
 		left.setPrefWidth(450);
 		return left;
 	}
 
 	private VBox buildRightOfTile(Proprietaire prop) {
-		Label coordonnees = createMessage("COORDONNEES:\n");
+		Label coordonnees = createMessage("COORDONNEES :\n");
 		coordonnees.setTextFill(Color.WHITE);
-		coordonnees.setFont(Font.font("Droid Serif", FontWeight.BOLD, 16));
+		coordonnees.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
 		coordonnees.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE, new CornerRadii(3), Insets.EMPTY)));
-		Label tel = createMessage("Tel :" + prop.getTel());
-		Label email = createMessage("email :" + prop.getEmail());
+		Label tel = createMessage("Tel : " + prop.getTel());
+		Label email = createMessage("Email : " + prop.getEmail());
 		VBox style = new VBox(tel, email);
 		style.setSpacing(30);
 		VBox right = new VBox(coordonnees, style);
 		right.setSpacing(20);
 		right.setPrefWidth(200);
-		right.setBorder(new Border(new BorderStroke(Color.DARKGREY,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
+		right.setBorder(new Border(new BorderStroke(Color.DARKGREY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+				BorderWidths.DEFAULT)));
 		right.setPadding(new Insets(10));
 		return right;
 	}

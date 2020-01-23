@@ -25,7 +25,7 @@ public class Main extends Application {
 		admin.addProp(prop3);
 		admin.addProp(prop4);
 
-		Bien bien1 = new Appartement("adr", Wilaya.WILAYA2, 120, prop2, Transaction.VENTE, 4000000., false,
+		Bien bien1 = new Appartement("adr", Wilaya.TIZIOUZOU, 120, prop2, Transaction.VENTE, 4000000., false,
 				"descdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdesc"
 						+ "descdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdesc"
 						+ "descdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdesc"
@@ -34,19 +34,19 @@ public class Main extends Application {
 						+ "descdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdesc"
 						+ "descdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdescdesc",
 				LocalDateTime.now(), false, 4, true, 1, false, true);
-		Bien bien2 = new Maison("adr", Wilaya.WILAYA3, 200, prop1, Transaction.VENTE, 10000000., false, "desc",
+		Bien bien2 = new Maison("adr", Wilaya.BEJAIA, 200, prop1, Transaction.VENTE, 10000000., false, "desc",
 				LocalDateTime.now(), false, 9, true, 3, false, true, false, 160);
-		Bien bien3 = new Terrain("adr", Wilaya.WILAYA1, 500, prop1, Transaction.VENTE, 20000000., false, "desc",
+		Bien bien3 = new Terrain("adr", Wilaya.ALGER, 500, prop1, Transaction.VENTE, 20000000., false, "desc",
 				LocalDateTime.now(), false, "stat", 3);
-		Bien bien4 = new Appartement("adr", Wilaya.WILAYA3, 100, prop2, Transaction.LOCATION, 40000., true, "desc",
+		Bien bien4 = new Appartement("adr", Wilaya.BEJAIA, 100, prop2, Transaction.LOCATION, 40000., true, "desc",
 				LocalDateTime.now(), false, 3, true, 1, false, false);
-		Bien bien5 = new Maison("adr", Wilaya.WILAYA2, 160, prop3, Transaction.LOCATION, 150000., true, "desc",
+		Bien bien5 = new Maison("adr", Wilaya.TIZIOUZOU, 160, prop3, Transaction.LOCATION, 150000., true, "desc",
 				LocalDateTime.now(), false, 10, true, 2, false, false, true, 120);
-		Bien bien6 = new Appartement("adr", Wilaya.WILAYA3, 50, prop2, Transaction.LOCATION, 60000., false, "desc",
+		Bien bien6 = new Appartement("adr", Wilaya.BEJAIA, 50, prop2, Transaction.LOCATION, 60000., false, "desc",
 				LocalDateTime.now(), false, 1, true, 6, false, false);
-		Bien bien7 = new Terrain("adr", Wilaya.WILAYA1, Wilaya.WILAYA1, 650, prop1, Transaction.ECHANGE, 18000000.,
+		Bien bien7 = new Terrain("adr", Wilaya.ALGER, Wilaya.ALGER, 650, prop1, Transaction.ECHANGE, 18000000.,
 				true, "desc", LocalDateTime.now(), false, "stat", 1);
-		Bien bien8 = new Maison("adr", Wilaya.WILAYA2, Wilaya.WILAYA2, 200, prop2, Transaction.ECHANGE, 14000000.,
+		Bien bien8 = new Maison("adr", Wilaya.TIZIOUZOU, Wilaya.TIZIOUZOU, 200, prop2, Transaction.ECHANGE, 14000000.,
 				false, "desc", LocalDateTime.now(), false, 11, false, 3, true, false, false, 160);
 
 		admin.addBien(bien1, prop2);
