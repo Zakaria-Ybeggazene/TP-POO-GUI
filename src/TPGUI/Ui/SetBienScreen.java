@@ -9,6 +9,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -32,7 +34,7 @@ public class SetBienScreen extends Stage {
         this.setResizable(false);
         setMaxWidth(800);
         setMaxHeight(500);
-        this.setScene(this.buildModifyBienScene(bien, this));
+        this.setScene(this.buildModifyBienScene(bien));
     }
 
     private Scene buildBienChoiceScene() {
@@ -50,6 +52,9 @@ public class SetBienScreen extends Stage {
         layout.setSpacing(30);
         layout.setPadding(new Insets(0, 0, 50, 0));
         scaffold.setCenter(layout);
+        scaffold.setOnKeyPressed(keyEvent -> {
+            if(keyEvent.getCode().equals(KeyCode.ESCAPE)) close();
+        });
         return new Scene(scaffold, 800, 500);
     }
 
@@ -240,10 +245,13 @@ public class SetBienScreen extends Stage {
         }
         scaffold.setCenter(form);
         scaffold.setPadding(new Insets(10));
+        scaffold.setOnKeyPressed(keyEvent -> {
+            if(keyEvent.getCode().equals(KeyCode.ESCAPE)) close();
+        });
         return new Scene(scaffold, 800, 500);
     }
 
-    private Scene buildModifyBienScene(Bien bien, SetBienScreen bienScreen) {
+    private Scene buildModifyBienScene(Bien bien) {
         BorderPane scaffold = new BorderPane();
         GridPane form = new GridPane();
         form.setVgap(2);
@@ -411,6 +419,9 @@ public class SetBienScreen extends Stage {
         }
         scaffold.setCenter(form);
         scaffold.setPadding(new Insets(10));
+        scaffold.setOnKeyPressed(keyEvent -> {
+            if(keyEvent.getCode().equals(KeyCode.ESCAPE)) close();
+        });
         return new Scene(scaffold, 800, 500);
     }
 

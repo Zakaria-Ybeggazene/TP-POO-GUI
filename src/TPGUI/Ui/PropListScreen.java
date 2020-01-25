@@ -2,8 +2,11 @@ package TPGUI.Ui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import TPGUI.Noyau.ImmoESI;
@@ -19,12 +22,15 @@ public class PropListScreen extends Stage {
 		this.setY(200);
 		BorderPane scaffold = new BorderPane();
 		ObservableList<Proprietaire> observableProp = FXCollections.observableList(ImmoESI.getListProprietaires());
-		ListView<Proprietaire> PropListView = new ListView<>();
-		PropListView.setMaxWidth(1000);
-		PropListView.setPrefWidth(700);
-		PropListView.setItems(observableProp);
-		PropListView.setCellFactory((ListView<Proprietaire> l) -> new PropCell());
-		scaffold.setCenter(PropListView);
+		ListView<Proprietaire> propListView = new ListView<>();
+		propListView.setMaxWidth(1000);
+		propListView.setPrefWidth(700);
+		propListView.setItems(observableProp);
+		propListView.setCellFactory((ListView<Proprietaire> l) -> new PropCell());
+		propListView.setOnKeyPressed(keyEvent -> {
+			if(keyEvent.getCode().equals(KeyCode.ESCAPE)) close();
+		});
+		scaffold.setCenter(propListView);
 		this.setScene(new Scene(scaffold, 800, 400));
 	}
 }

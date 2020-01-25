@@ -3,12 +3,15 @@ package TPGUI.Ui;
 import TPGUI.Control.ContactButtonController;
 
 import TPGUI.Noyau.*;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -25,6 +28,9 @@ public class DetailsScreen extends Stage {
 		this.setMaxWidth(800);
 		this.setMaxHeight(400);
 		BorderPane scaffold = new BorderPane();
+		scaffold.setOnKeyPressed(keyEvent -> {
+			if(keyEvent.getCode().equals(KeyCode.ESCAPE)) close();
+		});
 		ScrollPane scrollPane = new ScrollPane();
 		scaffold.setCenter(scrollPane);
 		this.setScene(new Scene(scaffold, 800, 400));

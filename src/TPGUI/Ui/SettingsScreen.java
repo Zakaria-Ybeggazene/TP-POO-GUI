@@ -31,6 +31,9 @@ public class SettingsScreen extends Stage {
 		this.setMaxWidth(400);
 		BorderPane scaffold = new BorderPane();
 		this.setScene(new Scene(scaffold, 400, 200));
+		scaffold.setOnKeyPressed(keyEvent -> {
+			if(keyEvent.getCode().equals(KeyCode.ESCAPE)) close();
+		});
 		Label passwordLabel1 = createMessage("Actual password    : ");
 		Label passwordLabel2 = createMessage("New password       : ");
 		Label passwordLabel3 = createMessage("Confirm                   : ");

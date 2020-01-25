@@ -2,7 +2,10 @@ package TPGUI.Ui;
 
 import TPGUI.Noyau.ImmoESI;
 import TPGUI.Noyau.Bien;
+import javafx.event.EventHandler;
 import javafx.scene.control.ListView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,12 +20,15 @@ public class ArchiveListScreen extends Stage {
 		this.setMaxHeight(400);
 		BorderPane scaffold = new BorderPane();
 		ObservableList<Bien> observableArchive = FXCollections.observableList(ImmoESI.getListArchive());
-		ListView<Bien> ArchiveListView = new ListView<>();
-		ArchiveListView.setMaxWidth(1000);
-		ArchiveListView.setPrefWidth(700);
-		ArchiveListView.setItems(observableArchive);
-		ArchiveListView.setCellFactory((ListView<Bien> l) -> new ArchiveBienCell());
-		scaffold.setCenter(ArchiveListView);
+		ListView<Bien> archiveListView = new ListView<>();
+		archiveListView.setMaxWidth(1000);
+		archiveListView.setPrefWidth(700);
+		archiveListView.setItems(observableArchive);
+		archiveListView.setCellFactory((ListView<Bien> l) -> new ArchiveBienCell());
+		archiveListView.setOnKeyPressed(keyEvent -> {
+			if(keyEvent.getCode().equals(KeyCode.ESCAPE)) close();
+		});
+		scaffold.setCenter(archiveListView);
 		this.setScene(new Scene(scaffold, 996, 400));
 	}
 }

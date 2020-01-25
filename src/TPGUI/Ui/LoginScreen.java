@@ -31,6 +31,9 @@ public class LoginScreen extends Stage {
         this.setMaxWidth(400);
         BorderPane scaffold = new BorderPane();
         this.setScene(new Scene(scaffold, 400, 200));
+        scaffold.setOnKeyPressed(keyEvent -> {
+            if(keyEvent.getCode().equals(KeyCode.ESCAPE)) close();
+        });
         Label passwordLabel = createMessage("Entrez le mot de passe de l'admin");
         passwordLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
         PasswordField passwordField = new PasswordField();

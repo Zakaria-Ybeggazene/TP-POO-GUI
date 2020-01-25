@@ -3,6 +3,7 @@ package TPGUI.Ui;
 import TPGUI.Noyau.Bien;
 
 import TPGUI.Control.*;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -29,6 +32,9 @@ public class ContactScreen extends Stage {
 		this.setY(200);
 		BorderPane scaffold = new BorderPane();
 		this.setScene(new Scene(scaffold, 800, 400));
+		scaffold.setOnKeyPressed(keyEvent -> {
+			if(keyEvent.getCode().equals(KeyCode.ESCAPE)) close();
+		});
 		Label message1 = createMessage(b.getIdentifiant() + " " + b.getNatureTransaction().getNomTrans() + " "
 				+ b.getClass().getSimpleName() + " " + b.getWilaya().toString());
 		message1.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
