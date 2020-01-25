@@ -1,5 +1,6 @@
 package TPGUI.Ui;
 
+import TPGUI.Control.AddPropButtonController;
 import TPGUI.Noyau.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,7 +11,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -111,6 +111,7 @@ public class SetBienScreen extends Stage {
         Button createPropButton = new Button("Creer Prop");
         createPropButton.setPrefSize(100, 10);
         createPropButton.setFont(Font.font("Verdana", FontWeight.BOLD, 11));
+        createPropButton.setOnAction(new AddPropButtonController());
         HBox addProp = new HBox(createPropLabel, createPropButton);
         addProp.setMaxSize(300, 50);
         addProp.setAlignment(Pos.CENTER_LEFT);

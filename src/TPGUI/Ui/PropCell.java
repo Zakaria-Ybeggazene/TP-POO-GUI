@@ -60,7 +60,7 @@ public class PropCell extends ListCell<Proprietaire> {
 		style.setSpacing(30);
 		VBox right = new VBox(coordonnees, style);
 		right.setSpacing(20);
-		right.setPrefWidth(200);
+		right.setPrefWidth(300);
 		right.setBorder(new Border(new BorderStroke(Color.DARKGREY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
 				BorderWidths.DEFAULT)));
 		right.setPadding(new Insets(10));
