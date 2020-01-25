@@ -32,6 +32,7 @@ public class ImmoESI {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 	public String getPassword() {
 		return password;
 	}
@@ -151,18 +152,15 @@ public class ImmoESI {
 			System.err.println("Your Should be Authenticated as Admin first");
 	}
 
-	public boolean addProp(Proprietaire p) {
-		if (isAuthenticated) {
-			if (listProprietaires.contains(p)) {
-				System.err.println("Propriétaire already existent in Liste Proprietaires");
-				return false;
-			} else {
-				return listProprietaires.add(p);
-			}
-		} else {
-			System.err.println("Your Should be Authenticated as Admin first");
+	public static boolean addProp(Proprietaire p) {
+
+		if (listProprietaires.contains(p)) {
+			System.err.println("Proprietaire already exist in Liste Proprietaires");
 			return false;
+		} else {
+			return listProprietaires.add(p);
 		}
+
 	}
 
 	public boolean removeProp(Proprietaire p) {

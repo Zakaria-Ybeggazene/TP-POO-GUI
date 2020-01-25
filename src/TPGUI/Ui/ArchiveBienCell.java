@@ -1,7 +1,7 @@
 package TPGUI.Ui;
 
 
-import TPGUI.Control.DetailsButtonController;
+import TPGUI.Control.DetailsButtonController; 
 import TPGUI.Noyau.Bien;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

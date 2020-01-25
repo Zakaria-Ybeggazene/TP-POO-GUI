@@ -2,12 +2,9 @@ package TPGUI.Ui;
 
 import TPGUI.Noyau.ImmoESI;
 
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
+
 import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
