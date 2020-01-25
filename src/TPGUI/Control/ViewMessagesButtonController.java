@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 public class ViewMessagesButtonController implements EventHandler<ActionEvent> {
 	public void handle(ActionEvent actionEvent) {
-		Stage stage = new ListMessagesScreen();
+		Stage stage = new MessagesListScreen();
 		stage.getIcons().add(new Image(("file:home.png")));
 		stage.show();
 	}

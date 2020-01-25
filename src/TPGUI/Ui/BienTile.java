@@ -1,7 +1,7 @@
 package TPGUI.Ui;
 import TPGUI.Control.ArchiveBienButtonController;
 import TPGUI.Control.DetailsButtonController;
-import TPGUI.Control.ModifyButtonController;
+import TPGUI.Control.ModifyBienButtonController;
 import TPGUI.Control.RemoveBienButtonController;
 import TPGUI.Control.ContactButtonController;
 import TPGUI.Noyau.Bien;
@@ -38,7 +38,7 @@ public class BienTile extends ListCell<Bien> {
             tile.setBorder(new Border(new BorderStroke(Color.LIGHTGREY, BorderStrokeStyle.SOLID,
                     new CornerRadii(5), BorderWidths.DEFAULT)));
             Button detailsOrModifyButton = buildTileButton(model.isAuthenticated() ? "Modify Bien" : "View Details");
-            detailsOrModifyButton.setOnAction(model.isAuthenticated() ? new ModifyButtonController()
+            detailsOrModifyButton.setOnAction(model.isAuthenticated() ? new ModifyBienButtonController(bien)
                     : new DetailsButtonController(bien));
             Button contactButton = buildTileButton("Contact");
             contactButton.setOnAction( new ContactButtonController(bien));

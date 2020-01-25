@@ -1,10 +1,6 @@
 package TPGUI.Ui;
 
-import TPGUI.Control.AdminLoginController;
-import TPGUI.Control.FilterButtonController;
-import TPGUI.Control.ViewArchiveButtonController;
-import TPGUI.Control.ViewMessagesButtonController;
-import TPGUI.Control.ViewPropButtonController;
+import TPGUI.Control.*;
 import TPGUI.Noyau.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -82,7 +78,7 @@ public class HomeScreen extends Stage {
                     buildStdTopButton("View Prop List", new ViewPropButtonController()),
                     buildStdTopButton("View Archive List", new ViewArchiveButtonController()),
                     buildStdTopButton("View Messages List", new ViewMessagesButtonController()),
-                    buildStdTopButton("Add Bien", null));
+                    buildStdTopButton("Add Bien", new AddBienButtonController()));
             
             topAdminTools.setSpacing(10);
             top = topAdminTools;
@@ -125,7 +121,7 @@ public class HomeScreen extends Stage {
         Label nbMinPiecesLabel = createMessage("Nombre min de pieces");
         nbMinPiecesLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
         Spinner<Integer> nbMinPiecesSpinner = new Spinner<>();
-        nbMinPiecesSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 30, 1, 1));
+        nbMinPiecesSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 30, 0, 1));
         Button filterButton = new Button("Filter");
         filterButton.setPrefSize(171, 35);
         filterButton.setFont(Font.font("Roboto", FontWeight.BOLD, 16));

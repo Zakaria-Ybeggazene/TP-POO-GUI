@@ -3,7 +3,6 @@ import java.time.LocalDateTime;
 
 public class Maison extends Habitable {
     private int nbEtages;
-    private int nbFacades;
     private boolean hasGarage, hasJardin, hasPiscine;
     private float superficieHabitable;
 
@@ -138,10 +137,6 @@ public class Maison extends Habitable {
                 break;
         }
         return prixFinal;
-    }
-
-    public int getNbFacades() {
-    	return this.nbFacades;
     }
     
     @Override

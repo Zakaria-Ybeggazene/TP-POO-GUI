@@ -3,14 +3,24 @@ package TPGUI.Ui;
 import java.time.LocalDateTime;
 
 
+import TPGUI.Noyau.ImmoESI;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class MessageCell extends ListCell<String> {
+	private MessagesListScreen messagesListScreen;
+
+	public MessageCell(MessagesListScreen messagesListScreen) {
+		this.messagesListScreen = messagesListScreen;
+	}
 
 	protected void updateItem(String message, boolean empty) {
 		super.updateItem(message, empty);
@@ -24,8 +34,22 @@ public class MessageCell extends ListCell<String> {
 					BorderWidths.DEFAULT)));
 			Label intro = createMessage("Message :");
 			Label messageDuClient = createMessage(message);
+			messageDuClient.setWrapText(true);
 			VBox layer = new VBox(intro, messageDuClient);
+			layer.setMaxWidth(650);
 			tile.setCenter(layer);
+			Button removeMessage = new Button("Remove\nMessage");
+			removeMessage.setAlignment(Pos.CENTER);
+			removeMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+			removeMessage.setPrefSize(100, 55);
+			removeMessage.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent actionEvent) {
+					ImmoESI.getListMessages().remove(message);
+					messagesListScreen.setScene(messagesListScreen.getNewScene());
+				}
+			});
+			tile.setRight(removeMessage);
 			setGraphic(tile);
 		}
 	}

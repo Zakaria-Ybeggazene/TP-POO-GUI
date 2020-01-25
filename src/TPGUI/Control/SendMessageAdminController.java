@@ -20,7 +20,7 @@ public class SendMessageAdminController implements EventHandler<ActionEvent> {
 		dateString = messageDateTime.getDayOfWeek().toString()+", "+messageDateTime.getDayOfMonth()+
 				" "+messageDateTime.getMonth().toString()+" "+messageDateTime.getYear()+" at "
 				+messageDateTime.getHour()+ ":"+messageDateTime.getMinute()+":"+messageDateTime.getSecond();
-		ImmoESI.getListMessages().add(message.getText()+"\n\n\t\t\t\t"+dateString);
+		if(message.getText().length() > 0) ImmoESI.getListMessages().add(message.getText()+"\n\n\t\t\t\t"+dateString);
 		message.setText("");
 	}
 

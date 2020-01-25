@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -45,6 +46,8 @@ public class ContactScreen extends Stage {
 		Label tel = createMessage("Tel : " + b.getProprietaire().getTel());
 		VBox infosProp = new VBox(nom, prenom, adresse, email, tel);// deuxième composant
 		TextArea messageToAdmin = new TextArea();
+		messageToAdmin.setTextFormatter(new TextFormatter<String>(change ->
+				change.getControlNewText().length() <= 300 ? change : null));
 		messageToAdmin.setText("");
 		messageToAdmin.setWrapText(true);
 		Button sendMessageButton = new Button("Send");
