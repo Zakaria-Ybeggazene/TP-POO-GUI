@@ -1,6 +1,12 @@
 package TPGUI.Ui;
 
 import TPGUI.Control.*;
+import TPGUI.Control.AdminLoginController;
+import TPGUI.Control.FilterButtonController;
+import TPGUI.Control.SettingsButtonController;
+import TPGUI.Control.ViewArchiveButtonController;
+import TPGUI.Control.ViewMessagesButtonController;
+import TPGUI.Control.ViewPropButtonController;
 import TPGUI.Noyau.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -74,7 +80,7 @@ public class HomeScreen extends Stage {
             TextFlow topMessage = new TextFlow(mainMessage, descriptionMessage);
             top = topMessage;
         } else {
-            HBox topAdminTools = new HBox(buildSettingsButton(),
+            HBox topAdminTools = new HBox(buildSettingsButton(new SettingsButtonController(model)),
                     buildStdTopButton("View Prop List", new ViewPropButtonController()),
                     buildStdTopButton("View Archive List", new ViewArchiveButtonController()),
                     buildStdTopButton("View Messages List", new ViewMessagesButtonController()),
@@ -194,11 +200,12 @@ public class HomeScreen extends Stage {
         return adminLoginButton;
     }
 
-    private Button buildSettingsButton() {
+    private Button buildSettingsButton(EventHandler<ActionEvent> controller) {
         Image settingsIcon = new Image(getClass().getResourceAsStream("../../settings.png"), 40, 40, true, true);
         Button settingButton = new Button();
         settingButton.setGraphic(new ImageView(settingsIcon));
         settingButton.setPrefSize(50, 50);
+        settingButton.setOnAction(controller);
         return settingButton;
     }
 

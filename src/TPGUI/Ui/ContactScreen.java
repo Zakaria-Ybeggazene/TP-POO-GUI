@@ -17,13 +17,11 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.time.LocalDateTime;
-
 public class ContactScreen extends Stage {
 
 	public ContactScreen(Bien b) {
-		this.setTitle("Contact " + b.getNatureTransaction().getNomTrans() + " " + b.getClass().getSimpleName()
-				+ " " + b.getWilaya().toString());
+		this.setTitle("Contact " + b.getNatureTransaction().getNomTrans() + " " + b.getClass().getSimpleName() + " "
+				+ b.getWilaya().toString());
 		this.setResizable(false);
 		this.setMaxWidth(800);
 		this.setMaxHeight(400);
@@ -31,11 +29,11 @@ public class ContactScreen extends Stage {
 		this.setY(200);
 		BorderPane scaffold = new BorderPane();
 		this.setScene(new Scene(scaffold, 800, 400));
-		Label message1 = createMessage(b.getIdentifiant()+" "+b.getNatureTransaction().getNomTrans()
-				+" " +b.getClass().getSimpleName()+" "+ b.getWilaya().toString());
-		message1.setFont(Font.font("Verdana",FontWeight.BOLD,16));
-		Label message2= createMessage("Contact us : ");
-		message2.setFont(Font.font("Verdana",FontWeight.BOLD,16));
+		Label message1 = createMessage(b.getIdentifiant() + " " + b.getNatureTransaction().getNomTrans() + " "
+				+ b.getClass().getSimpleName() + " " + b.getWilaya().toString());
+		message1.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+		Label message2 = createMessage("Contact us : ");
+		message2.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
 		HBox topLayout = new HBox(message1);
 		topLayout.setPrefSize(30, 30);
 		topLayout.setPadding(new Insets(20));
@@ -62,12 +60,12 @@ public class ContactScreen extends Stage {
 		infosProp.setSpacing(20);
 		VBox propInfoBox = new VBox(infosProp);
 		propInfoBox.setPadding(new Insets(20));
-		propInfoBox.setMaxSize(500,500);
-		propInfoBox.setBorder(new Border(new BorderStroke(Color.GREY, BorderStrokeStyle.SOLID,
-				new CornerRadii(2), BorderWidths.DEFAULT)));
-		//scrollPane.set
+		propInfoBox.setMaxSize(500, 500);
+		propInfoBox.setBorder(new Border(
+				new BorderStroke(Color.GREY, BorderStrokeStyle.SOLID, new CornerRadii(2), BorderWidths.DEFAULT)));
+		// scrollPane.set
 		scaffold.setTop(topLayout);
-		HBox midLayer = new HBox(propInfoBox,contactAdmin);
+		HBox midLayer = new HBox(propInfoBox, contactAdmin);
 		midLayer.setSpacing(60);
 		midLayer.setPadding(new Insets(20));
 		scaffold.setCenter(midLayer);

@@ -1,6 +1,7 @@
 package TPGUI.Control;
 
 import TPGUI.Noyau.ImmoESI;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextArea;
@@ -17,10 +18,10 @@ public class SendMessageAdminController implements EventHandler<ActionEvent> {
 	public void handle(ActionEvent actionEvent) {
 		String dateString;
 		LocalDateTime messageDateTime = LocalDateTime.now();
-		dateString = messageDateTime.getDayOfWeek().toString()+", "+messageDateTime.getDayOfMonth()+
-				" "+messageDateTime.getMonth().toString()+" "+messageDateTime.getYear()+" at "
-				+messageDateTime.getHour()+ ":"+messageDateTime.getMinute()+":"+messageDateTime.getSecond();
-		if(message.getText().length() > 0) ImmoESI.getListMessages().add(message.getText()+"\n\n\t\t\t\t"+dateString);
+		dateString = messageDateTime.getDayOfWeek().toString() + ", " + messageDateTime.getDayOfMonth() + " "
+				+ messageDateTime.getMonth().toString() + " " + messageDateTime.getYear() + " at "
+				+ messageDateTime.getHour() + ":" + messageDateTime.getMinute() + ":" + messageDateTime.getSecond();
+		ImmoESI.getListMessages().add(message.getText() + "\n\n\t\t\t\t" + dateString);
 		message.setText("");
 	}
 
