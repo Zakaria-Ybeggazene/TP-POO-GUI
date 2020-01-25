@@ -128,38 +128,31 @@ public class HomeScreen extends Stage {
         nbMinPiecesLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
         Spinner<Integer> nbMinPiecesSpinner = new Spinner<>();
         nbMinPiecesSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 30, 0, 1));
-        Button filterButton = new Button("Filter");
+        Button filterButton = new Button(observableBiens.size()==ImmoESI.getListBiens().size() ? "Filter" : "Clear");
         filterButton.setPrefSize(171, 35);
         filterButton.setFont(Font.font("Roboto", FontWeight.BOLD, 16));
-        filterButton.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE,
-                new CornerRadii(3), Insets.EMPTY)));
         filterButton.setTextFill(Color.WHITE);
-        filterButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                filterButton.setBackground(new Background(new BackgroundFill(Color.DARKBLUE,
-                        new CornerRadii(3), Insets.EMPTY)));
-            }
-        });
-        filterButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                filterButton.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE,
-                        new CornerRadii(3), Insets.EMPTY)));
-            }
-        });
-        filterButton.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                filterButton.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID,
-                        new CornerRadii(2), new BorderWidths(3))));
-            }
-        });
-        filterButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                filterButton.setBorder(Border.EMPTY);
-            }
+        if(observableBiens.size()== ImmoESI.getListBiens().size()) {
+            filterButton.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE,
+                    new CornerRadii(3), Insets.EMPTY)));
+            filterButton.setOnMouseEntered(mouseEvent -> filterButton.setBackground(new Background(new BackgroundFill(Color.DARKBLUE,
+                    new CornerRadii(3), Insets.EMPTY))));
+            filterButton.setOnMouseExited(mouseEvent -> filterButton.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE,
+                    new CornerRadii(3), Insets.EMPTY))));
+            filterButton.setOnMousePressed(mouseEvent -> filterButton.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID,
+                    new CornerRadii(2), new BorderWidths(3)))));
+        } else {
+            filterButton.setBackground(new Background(new BackgroundFill(Color.DARKGREY,
+                    new CornerRadii(3), Insets.EMPTY)));
+            filterButton.setOnMouseEntered(mouseEvent -> filterButton.setBackground(new Background(new BackgroundFill(Color.GREY,
+                    new CornerRadii(3), Insets.EMPTY))));
+            filterButton.setOnMouseExited(mouseEvent -> filterButton.setBackground(new Background(new BackgroundFill(Color.DARKGREY,
+                    new CornerRadii(3), Insets.EMPTY))));
+            filterButton.setOnMousePressed(mouseEvent -> filterButton.setBorder(new Border(new BorderStroke(Color.WHITESMOKE, BorderStrokeStyle.SOLID,
+                    new CornerRadii(2), new BorderWidths(3)))));
+        }
+        filterButton.setOnMouseReleased(mouseEvent -> {
+            filterButton.setBorder(Border.EMPTY);
         });
         filterButton.setOnAction(new FilterButtonController(this,
                 observableBiens,
