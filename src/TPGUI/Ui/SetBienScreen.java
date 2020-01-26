@@ -115,6 +115,7 @@ public class SetBienScreen extends Stage {
         }
         prop.setItems(propList);
         prop.setMaxWidth(190);
+        prop.setValue(propList.get(0));
         Label createPropLabel = createMessage("ou ajouter un prop : ");
         Button createPropButton = new Button("Creer Prop");
         createPropButton.setPrefSize(100, 10);
@@ -125,10 +126,13 @@ public class SetBienScreen extends Stage {
         addProp.setAlignment(Pos.CENTER_LEFT);
         Label typeTransLabel = createMessage("Type de Transaction");
         ChoiceBox<Transaction> typeTrans = new ChoiceBox<>(FXCollections.observableArrayList(Transaction.values()));
+        typeTrans.setValue(Transaction.VENTE);
         Label wilayaLabel = createMessage("Wilaya");
         ChoiceBox<Wilaya> wilaya = new ChoiceBox<>(FXCollections.observableArrayList(Wilaya.values()));
+        wilaya.setValue(Wilaya.ALGER);
         Label wilayaEchangeLabel = createMessage("Wilaya Echange");
         ChoiceBox<Wilaya> wilayaEchange = new ChoiceBox<>(FXCollections.observableArrayList(Wilaya.values()));
+        wilayaEchange.setValue(Wilaya.ALGER);
         wilayaEchange.setDisable(true);
         typeTrans.valueProperty().addListener((observableValue, transaction, t1) -> {
             if (t1.equals(Transaction.ECHANGE)) wilayaEchange.setDisable(false);
@@ -161,6 +165,7 @@ public class SetBienScreen extends Stage {
         price.setMaxWidth(150);
         Label prixNegociableLabel = createMessage("Prix Negociable ? ");
         ChoiceBox<String> prixNegociable = new ChoiceBox<>(FXCollections.observableArrayList("Oui", "Non"));
+        prixNegociable.setValue("Non");
         HBox prixNegociableLine = new HBox(prixNegociableLabel, prixNegociable);
         prixNegociableLine.setAlignment(Pos.CENTER_LEFT);
         Label descriptifLabel = createMessage("Descriptif");
@@ -174,6 +179,7 @@ public class SetBienScreen extends Stage {
         if (typeBienString.equals("Appartement")) {
             Label estMeubleLabel = createMessage("Meublé ? ");
             ChoiceBox<String> estMeuble = new ChoiceBox<>(FXCollections.observableArrayList("Oui", "Non"));
+            estMeuble.setValue("Non");
             HBox estMeubleLine = new HBox(estMeubleLabel, estMeuble);
             estMeubleLine.setAlignment(Pos.CENTER_LEFT);
             Label nbPiecesLabel = createMessage("Nombre de pieces");
@@ -190,10 +196,12 @@ public class SetBienScreen extends Stage {
             nbPiecesEtageBox.setSpacing(3);
             Label isDuplexLabel = createMessage("Duplex ? ");
             ChoiceBox<String> isDuplex = new ChoiceBox<>(FXCollections.observableArrayList("Oui", "Non"));
+            isDuplex.setValue("Non");
             HBox isDuplexLine = new HBox(isDuplexLabel, isDuplex);
             isDuplexLine.setAlignment(Pos.CENTER_LEFT);
             Label hasAscenseurLabel = createMessage("Ascenseur ? ");
             ChoiceBox<String> hasAscenseur = new ChoiceBox<>(FXCollections.observableArrayList("Oui", "Non"));
+            hasAscenseur.setValue("Oui");
             HBox hasAscenseurLine = new HBox(hasAscenseurLabel, hasAscenseur);
             hasAscenseurLine.setAlignment(Pos.CENTER_LEFT);
             HBox duplexAscenseurBox = new HBox(isDuplexLine, hasAscenseurLine);
@@ -202,9 +210,104 @@ public class SetBienScreen extends Stage {
                     duplexAscenseurBox, descriptifLabel, descriptif);
             right.setSpacing(2);
             form.addColumn(1, right);
+            Button saveBien = new Button("Add appartement");
+            HBox bottom = new HBox(saveBien);
+            bottom.setAlignment(Pos.CENTER_RIGHT);
+            scaffold.setBottom(bottom);
+            saveBien.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+            saveBien.setPrefSize(200, 40);
+            saveBien.setOnAction(new EventHandler<>() {
+                private void checkDuplexException() throws DuplexException {
+                    if (isDuplex.getValue().equals("Oui") && nbPiecesSpinner.getValue() < 2) {
+                        throw new DuplexException();
+                    }
+                }
+
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    Service<Void> service = new AddPropScreen.ProcessService();
+                    if (!service.isRunning()) {
+                        service.start();
+                    }
+                    Label checkInfoLabel = createMessage("Check bien informations again!");
+                    checkInfoLabel.setTextFill(Color.RED);
+                    Label succeededLabel = createMessage("Bien Added");
+                    succeededLabel.setTextFill(Color.GREEN);
+                    if (address.getText().isEmpty() || superficie.getText().isEmpty() || Float.parseFloat(superficie.getText()) > 999999 ||
+                            price.getText().isEmpty()  || Double.parseDouble(price.getText()) == 0.0) {
+                        if (bottom.getChildren().size() > 1) bottom.getChildren().remove(1);
+                        bottom.getChildren().add(checkInfoLabel);
+                        bottom.setSpacing(10);
+                    } else {
+                        try {
+                            checkDuplexException();
+                            Proprietaire proprietaire = null;
+                            String[] strings = prop.getValue().split(", Tel : ");
+                            String tel = strings[1].strip();
+                            for (Proprietaire p : ImmoESI.getListProprietaires()) {
+                                if (p.getTel().equals(tel)) {
+                                    proprietaire = p;
+                                    break;
+                                }
+                            }
+                            if (typeTrans.getValue().equals(Transaction.ECHANGE)) {
+                                Appartement appartement = new Appartement(address.getText(),
+                                        wilaya.getValue(),
+                                        wilayaEchange.getValue(),
+                                        Float.parseFloat(superficie.getText()),
+                                        proprietaire,
+                                        typeTrans.getValue(),
+                                        Double.parseDouble(price.getText()),
+                                        prixNegociable.getValue().equals("Oui"),
+                                        descriptif.getText(),
+                                        LocalDateTime.now(),
+                                        false,
+                                        nbPiecesSpinner.getValue(),
+                                        estMeuble.getValue().equals("Oui"),
+                                        etageSpinner.getValue(),
+                                        isDuplex.getValue().equals("Oui"),
+                                        hasAscenseur.getValue().equals("Oui")
+                                        );
+                                model.addBien(appartement, proprietaire);
+                            } else {
+                                Appartement appartement = new Appartement(address.getText(),
+                                        wilaya.getValue(),
+                                        Float.parseFloat(superficie.getText()),
+                                        proprietaire,
+                                        typeTrans.getValue(),
+                                        Double.parseDouble(price.getText()),
+                                        prixNegociable.getValue().equals("Oui"),
+                                        descriptif.getText(),
+                                        LocalDateTime.now(),
+                                        false,
+                                        nbPiecesSpinner.getValue(),
+                                        estMeuble.getValue().equals("Oui"),
+                                        etageSpinner.getValue(),
+                                        isDuplex.getValue().equals("Oui"),
+                                        hasAscenseur.getValue().equals("Oui")
+                                );
+                                model.addBien(appartement, proprietaire);
+                            }
+                            if (bottom.getChildren().size() > 1) bottom.getChildren().remove(1);
+                            bottom.getChildren().add(succeededLabel);
+                            bottom.setSpacing(10);
+                            service.setOnSucceeded(e -> {
+                                SetBienScreen.this.close();
+                                service.reset();
+                            });
+                        } catch (DuplexException e) {
+                            System.err.println("ImmoESI" + LocalDateTime.now().toString() + ": Duplex Exception Captured");
+                            if (bottom.getChildren().size() > 1) bottom.getChildren().remove(1);
+                            bottom.getChildren().add(checkInfoLabel);
+                            bottom.setSpacing(10);
+                        }
+                    }
+                }
+            });
         } else if (typeBienString.equals("Maison")) {
             Label estMeubleLabel = createMessage("Meublé ? ");
             ChoiceBox<String> estMeuble = new ChoiceBox<>(FXCollections.observableArrayList("Oui", "Non"));
+            estMeuble.setValue("Oui");
             HBox estMeubleLine = new HBox(estMeubleLabel, estMeuble);
             estMeubleLine.setAlignment(Pos.CENTER_LEFT);
             Label nbPiecesLabel = createMessage("Nombre de pieces");
@@ -221,16 +324,19 @@ public class SetBienScreen extends Stage {
             nbPiecesNbEtagesBox.setSpacing(3);
             Label hasGarageLabel = createMessage("Garage ? ");
             ChoiceBox<String> hasGarage = new ChoiceBox<>(FXCollections.observableArrayList("Oui", "Non"));
+            hasGarage.setValue("Non");
             HBox hasGarageLine = new HBox(hasGarageLabel, hasGarage);
             hasGarageLine.setAlignment(Pos.CENTER_LEFT);
             Label hasJardinLabel = createMessage("Jardin ? ");
             ChoiceBox<String> hasJardin = new ChoiceBox<>(FXCollections.observableArrayList("Oui", "Non"));
+            hasJardin.setValue("Non");
             HBox hasJardinLine = new HBox(hasJardinLabel, hasJardin);
             hasJardinLine.setAlignment(Pos.CENTER_LEFT);
             HBox garageJardinBox = new HBox(hasGarageLine, hasJardinLine);
             garageJardinBox.setSpacing(3);
             Label hasPiscineLabel = createMessage("Piscine ? ");
             ChoiceBox<String> hasPiscine = new ChoiceBox<>(FXCollections.observableArrayList("Oui", "Non"));
+            hasPiscine.setValue("Non");
             HBox hasPiscineLine = new HBox(hasPiscineLabel, hasPiscine);
             hasPiscineLine.setAlignment(Pos.CENTER_LEFT);
             Label superficieHabitableLabel = createMessage("Superficie habitable (m²)");
@@ -246,6 +352,102 @@ public class SetBienScreen extends Stage {
                     descriptifLabel, descriptif);
             right.setSpacing(2);
             form.addColumn(1, right);
+            Button saveBien = new Button("Add maison");
+            HBox bottom = new HBox(saveBien);
+            bottom.setAlignment(Pos.CENTER_RIGHT);
+            scaffold.setBottom(bottom);
+            saveBien.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+            saveBien.setPrefSize(200, 40);
+            saveBien.setOnAction(new EventHandler<ActionEvent>() {
+                private void checkSuperficieException() throws SuperficieException {
+                    if (Float.parseFloat(superficie.getText()) < Float.parseFloat(superficieHabitable.getText())) throw
+                            new SuperficieException();
+                }
+
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    Service<Void> service = new AddPropScreen.ProcessService();
+                    if (!service.isRunning()) {
+                        service.start();
+                    }
+                    Label checkInfoLabel = createMessage("Check bien informations again!");
+                    checkInfoLabel.setTextFill(Color.RED);
+                    Label succeededLabel = createMessage("Bien Added");
+                    succeededLabel.setTextFill(Color.GREEN);
+                    if (address.getText().isEmpty() || superficie.getText().isEmpty() || Float.parseFloat(superficie.getText()) > 999999
+                            || superficieHabitable.getText().isEmpty() || Float.parseFloat(superficieHabitable.getText()) > 999999 ||
+                            price.getText().isEmpty() || Double.parseDouble(price.getText()) == 0.0) {
+                        if (bottom.getChildren().size() > 1) bottom.getChildren().remove(1);
+                        bottom.getChildren().add(checkInfoLabel);
+                        bottom.setSpacing(10);
+                    } else {
+                        try {
+                            checkSuperficieException();
+                            Proprietaire proprietaire = null;
+                            String[] strings = prop.getValue().split(", Tel : ");
+                            String tel = strings[1].strip();
+                            for (Proprietaire p : ImmoESI.getListProprietaires()) {
+                                if (p.getTel().equals(tel)) {
+                                    proprietaire = p;
+                                    break;
+                                }
+                            }
+                            if (typeTrans.getValue().equals(Transaction.ECHANGE)) {
+                                Maison maison = new Maison(address.getText(),
+                                        wilaya.getValue(),
+                                        wilayaEchange.getValue(),
+                                        Float.parseFloat(superficie.getText()),
+                                        proprietaire,
+                                        typeTrans.getValue(),
+                                        Double.parseDouble(price.getText()),
+                                        prixNegociable.getValue().equals("Oui"),
+                                        descriptif.getText(),
+                                        LocalDateTime.now(),
+                                        false,
+                                        nbPiecesSpinner.getValue(),
+                                        estMeuble.getValue().equals("Oui"),
+                                        nbEtagesSpinner.getValue(),
+                                        hasGarage.getValue().equals("Oui"),
+                                        hasJardin.getValue().equals("Oui"),
+                                        hasPiscine.getValue().equals("Oui"),
+                                Float.parseFloat(superficieHabitable.getText()));
+                                model.addBien(maison, proprietaire);
+                            } else {
+                                Maison maison = new Maison(address.getText(),
+                                        wilaya.getValue(),
+                                        Float.parseFloat(superficie.getText()),
+                                        proprietaire,
+                                        typeTrans.getValue(),
+                                        Double.parseDouble(price.getText()),
+                                        prixNegociable.getValue().equals("Oui"),
+                                        descriptif.getText(),
+                                        LocalDateTime.now(),
+                                        false,
+                                        nbPiecesSpinner.getValue(),
+                                        estMeuble.getValue().equals("Oui"),
+                                        nbEtagesSpinner.getValue(),
+                                        hasGarage.getValue().equals("Oui"),
+                                        hasJardin.getValue().equals("Oui"),
+                                        hasPiscine.getValue().equals("Oui"),
+                                        Float.parseFloat(superficieHabitable.getText()));
+                                model.addBien(maison, proprietaire);
+                            }
+                            if (bottom.getChildren().size() > 1) bottom.getChildren().remove(1);
+                            bottom.getChildren().add(succeededLabel);
+                            bottom.setSpacing(10);
+                            service.setOnSucceeded(e -> {
+                                SetBienScreen.this.close();
+                                service.reset();
+                            });
+                        } catch (SuperficieException e) {
+                            System.err.println("ImmoESI" + LocalDateTime.now().toString() + ": Superficie Exception Captured");
+                            if (bottom.getChildren().size() > 1) bottom.getChildren().remove(1);
+                            bottom.getChildren().add(checkInfoLabel);
+                            bottom.setSpacing(10);
+                        }
+                    }
+                }
+            });
         } else {
             Label statutJuridiqueLabel = createMessage("Statut Juridique");
             TextField statutJuridique = new TextField();
@@ -258,6 +460,78 @@ public class SetBienScreen extends Stage {
                     nbFacadesLabel, nbFacadesSpinner, descriptifLabel, descriptif);
             right.setSpacing(2);
             form.addColumn(1, right);
+            Button saveBien = new Button("Add terrain");
+            HBox bottom = new HBox(saveBien);
+            bottom.setAlignment(Pos.CENTER_RIGHT);
+            scaffold.setBottom(bottom);
+            saveBien.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+            saveBien.setPrefSize(200, 40);
+            saveBien.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    Service<Void> service = new AddPropScreen.ProcessService();
+                    if (!service.isRunning()) {
+                        service.start();
+                    }
+                    Label checkInfoLabel = createMessage("Check bien informations again!");
+                    checkInfoLabel.setTextFill(Color.RED);
+                    Label succeededLabel = createMessage("Bien Modified");
+                    succeededLabel.setTextFill(Color.GREEN);
+                    if (address.getText().isEmpty() || superficie.getText().isEmpty() || Float.parseFloat(superficie.getText()) > 999999 ||
+                            price.getText().isEmpty() || Double.parseDouble(price.getText()) == 0.0) {
+                        if (bottom.getChildren().size() > 1) bottom.getChildren().remove(1);
+                        bottom.getChildren().add(checkInfoLabel);
+                        bottom.setSpacing(10);
+                    } else {
+                        Proprietaire proprietaire = null;
+                        String[] strings = prop.getValue().split(", Tel : ");
+                        String tel = strings[1].strip();
+                        for (Proprietaire p : ImmoESI.getListProprietaires()) {
+                            if (p.getTel().equals(tel)) {
+                                proprietaire = p;
+                                break;
+                            }
+                        }
+                        if (typeTrans.getValue().equals(Transaction.ECHANGE)) {
+                            Terrain terrain = new Terrain(address.getText(),
+                                    wilaya.getValue(),
+                                    wilayaEchange.getValue(),
+                                    Float.parseFloat(superficie.getText()),
+                                    proprietaire,
+                                    typeTrans.getValue(),
+                                    Double.parseDouble(price.getText()),
+                                    prixNegociable.getValue().equals("Oui"),
+                                    descriptif.getText(),
+                                    LocalDateTime.now(),
+                                    false,
+                                    statutJuridique.getText(),
+                                    nbFacadesSpinner.getValue());
+                            model.addBien(terrain, proprietaire);
+                        } else {
+                            Terrain terrain = new Terrain(address.getText(),
+                                    wilaya.getValue(),
+                                    Float.parseFloat(superficie.getText()),
+                                    proprietaire,
+                                    typeTrans.getValue(),
+                                    Double.parseDouble(price.getText()),
+                                    prixNegociable.getValue().equals("Oui"),
+                                    descriptif.getText(),
+                                    LocalDateTime.now(),
+                                    false,
+                                    statutJuridique.getText(),
+                                    nbFacadesSpinner.getValue());
+                            model.addBien(terrain, proprietaire);
+                        }
+                        if (bottom.getChildren().size() > 1) bottom.getChildren().remove(1);
+                        bottom.getChildren().add(succeededLabel);
+                        bottom.setSpacing(10);
+                        service.setOnSucceeded(e -> {
+                            SetBienScreen.this.close();
+                            service.reset();
+                        });
+                    }
+                }
+            });
         }
         scaffold.setCenter(form);
         scaffold.setPadding(new Insets(10));
@@ -483,7 +757,7 @@ public class SetBienScreen extends Stage {
                 }
             });
             superficieHabitable.setMaxWidth(150);
-            superficieHabitable.setText(((Maison) bien).getSuperficieHabitable() + "");
+            superficieHabitable.setText(String.valueOf((int) ((Maison) bien).getSuperficieHabitable()));
             VBox right = new VBox(priceLabel, price, prixNegociableLine, estMeubleLine, nbPiecesNbEtagesBox,
                     garageJardinBox, hasPiscineLine, superficieHabitableLabel, superficieHabitable,
                     descriptifLabel, descriptif);
