@@ -98,4 +98,12 @@ public abstract class Habitable extends Bien {
             System.out.println("Meublé : Non");
         }
     }
+
+    public void setNbPieces(int nbPieces) {
+        this.nbPieces = nbPieces;
+    }
+
+    public void setEstMeuble(boolean estMeuble) {
+        this.estMeuble = estMeuble;
+    }
 }

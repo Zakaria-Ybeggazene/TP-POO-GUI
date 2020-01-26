@@ -115,4 +115,12 @@ public class Terrain extends Bien {
         System.out.println("Lien vers statut juridique : "+statutJuridique);
         System.out.println("Nombre de façades : "+nbFacades);
     }
+
+    public void setStatutJuridique(String statutJuridique) {
+        this.statutJuridique = statutJuridique;
+    }
+
+    public void setNbFacades(int nbFacades) {
+        this.nbFacades = nbFacades;
+    }
 }

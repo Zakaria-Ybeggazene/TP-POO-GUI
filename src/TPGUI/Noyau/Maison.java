@@ -169,6 +169,26 @@ public class Maison extends Habitable {
         return superficieHabitable;
     }
 
+    public void setNbEtages(int nbEtages) {
+        this.nbEtages = nbEtages;
+    }
+
+    public void setHasGarage(boolean hasGarage) {
+        this.hasGarage = hasGarage;
+    }
+
+    public void setHasJardin(boolean hasJardin) {
+        this.hasJardin = hasJardin;
+    }
+
+    public void setHasPiscine(boolean hasPiscine) {
+        this.hasPiscine = hasPiscine;
+    }
+
+    public void setSuperficieHabitable(float superficieHabitable) {
+        this.superficieHabitable = superficieHabitable;
+    }
+
     @Override
     public void afficherInfo() {
         super.afficherInfo();

@@ -21,12 +21,13 @@ public class ImmoESI {
 		criteriaMap.put("nbpieces_min", -1);
 	}
 
-	public void login(String password) {
+	public void login(String password) throws LoginException {
 		// String password = "1mM0€5i_=";
-		if (password.equals(this.password))
+		if (password.equals(this.password)) {
 			isAuthenticated = true;
-		else
-			System.err.println("Wrong Password");
+		}
+		else throw new LoginException();
+		//System.err.println("Wrong Password"); dans le cas de l'utilisation de la CLI
 	}
 
 	public void setPassword(String password) {
@@ -153,14 +154,12 @@ public class ImmoESI {
 	}
 
 	public static boolean addProp(Proprietaire p) {
-
 		if (listProprietaires.contains(p)) {
 			System.err.println("Proprietaire already exist in Liste Proprietaires");
 			return false;
 		} else {
 			return listProprietaires.add(p);
 		}
-
 	}
 
 	public boolean removeProp(Proprietaire p) {
@@ -260,7 +259,7 @@ public class ImmoESI {
 	 * Scanner(System.in); int choix = 0; String transaction = ""; String wilaya;
 	 * double prixMinimum = 0; double prixMaximum = 0; String typeBien = ""; float
 	 * superficieMin = 0; short nbPieceMin = 0;
-	 * 
+	 *
 	 * System.out.print("choisir les criteres de recherche\n\n");
 	 * System.out.print("1)type de transaction\n"); System.out.print("2)wilaya\n");
 	 * System.out.print("3)prix minimum\n"); System.out.print("4)prix maximum\n");
@@ -295,7 +294,7 @@ public class ImmoESI {
 	 * if (b.getPrixFinal() <= prixMaximum || prixMaximum == 0) if
 	 * (b.getClass().toString().compareTo(typeBien) == 0 || typeBien.equals("")) if
 	 * (b.superficie >= superficieMin || superficieMin == 0) b.afficherInfo();
-	 * 
+	 *
 	 * } }// end of filtrer
 	 */
 }

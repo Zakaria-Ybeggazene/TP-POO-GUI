@@ -110,6 +110,10 @@ public abstract class Bien {
         return wilaya;
     }
 
+    public Wilaya getWilayaEchange() {
+        return wilayaEchange;
+    }
+
     public float getSuperficie() {
         return superficie;
     }
@@ -202,6 +206,10 @@ public abstract class Bien {
 
     public void setSuperficie(float superficie) {
         this.superficie = superficie;
+    }
+
+    public void setNatureTransaction(Transaction natureTransaction) {
+        this.natureTransaction = natureTransaction;
     }
 
     public void setProprietaire(Proprietaire proprietaire) {

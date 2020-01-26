@@ -170,4 +170,16 @@ public class Appartement extends Habitable {
             System.out.println("Type Appartement : Simplex");
         }
     }
+
+    public void setDuplex(boolean duplex) {
+        isDuplex = duplex;
+    }
+
+    public void setEtage(int etage) {
+        this.etage = etage;
+    }
+
+    public void setHasAscenseur(boolean hasAscenseur) {
+        this.hasAscenseur = hasAscenseur;
+    }
 }

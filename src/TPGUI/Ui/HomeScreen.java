@@ -84,7 +84,7 @@ public class HomeScreen extends Stage {
                     buildStdTopButton("View Prop List", new ViewPropButtonController()),
                     buildStdTopButton("View Archive List", new ViewArchiveButtonController()),
                     buildStdTopButton("View Messages List", new ViewMessagesButtonController()),
-                    buildStdTopButton("Add Bien", new AddBienButtonController()));
+                    buildStdTopButton("Add Bien", new AddBienButtonController(model)));
             
             topAdminTools.setSpacing(10);
             top = topAdminTools;

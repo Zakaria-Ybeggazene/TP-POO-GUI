@@ -1,6 +1,7 @@
 package TPGUI.Ui;
 
 import TPGUI.Noyau.ImmoESI;
+import TPGUI.Noyau.LoginException;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -17,6 +18,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+
+import java.time.LocalDateTime;
 
 public class LoginScreen extends Stage {
     ImmoESI model;
@@ -44,20 +47,12 @@ public class LoginScreen extends Stage {
         layout.setAlignment(Pos.CENTER);
         layout.setSpacing(5);
         layout.setMaxWidth(350);
-        passwordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                if (keyEvent.getCode().equals(KeyCode.ENTER)) {
-                    loginGraphic(passwordField, layout);
-                }
-            }
-        });
-        loginButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
+        passwordField.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                 loginGraphic(passwordField, layout);
             }
         });
+        loginButton.setOnAction(actionEvent -> loginGraphic(passwordField, layout));
         scaffold.setCenter(layout);
     }
 
@@ -74,20 +69,23 @@ public class LoginScreen extends Stage {
         if(!service.isRunning()) {
             service.start();
         }
-        model.login(passwordField.getText());
-        if (model.isAuthenticated()) {
-            passwordField.setText("");
-            Label correctPass = createMessage("You are authenticated");
-            correctPass.setTextFill(Color.GREEN);
-            if (layout.getChildren().size() > 3) layout.getChildren().remove(3);
-            layout.getChildren().add(correctPass);
-            service.setOnSucceeded(e -> {
-                this.close();
-                homeScreen.setScene(homeScreen.getNewScene(FXCollections.observableList(ImmoESI.getListBiens())));
-                homeScreen.show();
-                service.reset();
-            });
-        } else {
+        try {
+            model.login(passwordField.getText());
+            if (model.isAuthenticated()) {
+                passwordField.setText("");
+                Label correctPass = createMessage("You are authenticated");
+                correctPass.setTextFill(Color.GREEN);
+                if (layout.getChildren().size() > 3) layout.getChildren().remove(3);
+                layout.getChildren().add(correctPass);
+                service.setOnSucceeded(e -> {
+                    this.close();
+                    homeScreen.setScene(homeScreen.getNewScene(FXCollections.observableList(ImmoESI.getListBiens())));
+                    homeScreen.show();
+                    service.reset();
+                });
+            }
+        } catch (LoginException e) {
+            System.err.println("ImmoESI"+ LocalDateTime.now().toString()+": Login Exception Captured");
             passwordField.setText("");
             Label wrongPass = createMessage("Wrong Password");
             wrongPass.setTextFill(Color.RED);

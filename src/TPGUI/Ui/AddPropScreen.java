@@ -30,8 +30,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+import java.util.Set;
+
 public class AddPropScreen extends Stage {
-	public AddPropScreen() {
+
+	public AddPropScreen(SetBienScreen bienScreen, String typeBienString) {
 		this.setTitle("Add proprietaire");
 		this.setResizable(false);
 		this.setMaxWidth(800);
@@ -88,34 +91,29 @@ public class AddPropScreen extends Stage {
 		btnLayout.setAlignment(Pos.CENTER);
 		VBox layout = new VBox(name, adress, coordonnees, btnLayout);
 		layout.setSpacing(30);
-		this.getScene().setOnKeyPressed(new EventHandler<KeyEvent>(){
-			public void handle(KeyEvent keyEvent) {
-				if (keyEvent.getCode().equals(KeyCode.ENTER)) {
-				TextField[] tab = new TextField[5];
-				tab[0] = champsNom;
-				tab[1] = champsPrenom;
-				tab[2] = champsAdr;
-				tab[3] = champsTel;
-				tab[4] = champsMail;
-				addPropGraphic(tab, layout);}
-			}
+		this.getScene().setOnKeyPressed(keyEvent -> {
+			if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+			TextField[] tab = new TextField[5];
+			tab[0] = champsNom;
+			tab[1] = champsPrenom;
+			tab[2] = champsAdr;
+			tab[3] = champsTel;
+			tab[4] = champsMail;
+			addPropGraphic(tab, layout, bienScreen, typeBienString);}
 		});
-		addPropButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent actionEvent) {
-				TextField[] tab = new TextField[5];
-				tab[0] = champsNom;
-				tab[1] = champsPrenom;
-				tab[2] = champsAdr;
-				tab[3] = champsTel;
-				tab[4] = champsMail;
-				addPropGraphic(tab, layout);
-			}
+		addPropButton.setOnAction(actionEvent -> {
+			TextField[] tab = new TextField[5];
+			tab[0] = champsNom;
+			tab[1] = champsPrenom;
+			tab[2] = champsAdr;
+			tab[3] = champsTel;
+			tab[4] = champsMail;
+			addPropGraphic(tab, layout, bienScreen, typeBienString);
 		});
 		scaffold.setCenter(layout);
 	}
 
-	private void addPropGraphic(TextField[] tab, VBox layout) {
+	private void addPropGraphic(TextField[] tab, VBox layout, SetBienScreen bienScreen, String typeBienString) {
 		boolean emptyField = false;
 		Label champsObligatoire = createMessage("\t\t\t\t\t\tChamps obligatoire");
 		champsObligatoire.setTextFill(Color.RED);
@@ -171,9 +169,9 @@ public class AddPropScreen extends Stage {
 			service.setOnSucceeded(e -> {
 				this.close();
 				service.reset();
+				bienScreen.setScene(bienScreen.buildAddBienScene(typeBienString, bienScreen));
 			});
 		}
-
 	}
 
 	static class ProcessService extends Service<Void> {
@@ -189,7 +187,6 @@ public class AddPropScreen extends Stage {
 				}
 			};
 		}
-
 	}
 
 	private Label createMessage(String s) {

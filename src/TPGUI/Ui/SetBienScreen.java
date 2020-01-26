@@ -4,6 +4,8 @@ import TPGUI.Control.AddPropButtonController;
 import TPGUI.Noyau.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -12,16 +14,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+import java.time.LocalDateTime;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
 public class SetBienScreen extends Stage {
-    public SetBienScreen() {
+    private ImmoESI model;
+
+    public SetBienScreen(ImmoESI model) {
+        this.model = model;
         this.setTitle("Add Bien");
         this.setResizable(false);
         setMaxWidth(800);
@@ -29,7 +36,8 @@ public class SetBienScreen extends Stage {
         this.setScene(this.buildBienChoiceScene());
     }
 
-    public SetBienScreen(Bien bien) {
+    public SetBienScreen(ImmoESI model, Bien bien) {
+        this.model = model;
         this.setTitle("Modify Bien");
         this.setResizable(false);
         setMaxWidth(800);
@@ -53,7 +61,7 @@ public class SetBienScreen extends Stage {
         layout.setPadding(new Insets(0, 0, 50, 0));
         scaffold.setCenter(layout);
         scaffold.setOnKeyPressed(keyEvent -> {
-            if(keyEvent.getCode().equals(KeyCode.ESCAPE)) close();
+            if (keyEvent.getCode().equals(KeyCode.ESCAPE)) close();
         });
         return new Scene(scaffold, 800, 500);
     }
@@ -80,7 +88,7 @@ public class SetBienScreen extends Stage {
         };
     }
 
-    private Scene buildAddBienScene(String typeBienString, SetBienScreen bienScreen) {
+    public Scene buildAddBienScene(String typeBienString, SetBienScreen bienScreen) {
         BorderPane scaffold = new BorderPane();
         Button returnToChoiceButton = new Button("<- Retour aux choix");
         returnToChoiceButton.setPrefSize(150, 20);
@@ -103,7 +111,7 @@ public class SetBienScreen extends Stage {
         ObservableList<String> propList = FXCollections.observableArrayList();
         ChoiceBox<String> prop = new ChoiceBox<>();
         for (Proprietaire p : ImmoESI.getListProprietaires()) {
-            propList.add(p.getNom() + " " + p.getPrenom() + ", Email : " + p.getEmail());
+            propList.add(p.getNom() + " " + p.getPrenom() + ", Tel : " + p.getTel());
         }
         prop.setItems(propList);
         prop.setMaxWidth(190);
@@ -111,7 +119,7 @@ public class SetBienScreen extends Stage {
         Button createPropButton = new Button("Creer Prop");
         createPropButton.setPrefSize(100, 10);
         createPropButton.setFont(Font.font("Verdana", FontWeight.BOLD, 11));
-        createPropButton.setOnAction(new AddPropButtonController());
+        createPropButton.setOnAction(new AddPropButtonController(bienScreen, typeBienString));
         HBox addProp = new HBox(createPropLabel, createPropButton);
         addProp.setMaxSize(300, 50);
         addProp.setAlignment(Pos.CENTER_LEFT);
@@ -119,6 +127,13 @@ public class SetBienScreen extends Stage {
         ChoiceBox<Transaction> typeTrans = new ChoiceBox<>(FXCollections.observableArrayList(Transaction.values()));
         Label wilayaLabel = createMessage("Wilaya");
         ChoiceBox<Wilaya> wilaya = new ChoiceBox<>(FXCollections.observableArrayList(Wilaya.values()));
+        Label wilayaEchangeLabel = createMessage("Wilaya Echange");
+        ChoiceBox<Wilaya> wilayaEchange = new ChoiceBox<>(FXCollections.observableArrayList(Wilaya.values()));
+        wilayaEchange.setDisable(true);
+        typeTrans.valueProperty().addListener((observableValue, transaction, t1) -> {
+            if (t1.equals(Transaction.ECHANGE)) wilayaEchange.setDisable(false);
+            else wilayaEchange.setDisable(true);
+        });
         Label addressLabel = createMessage("Adresse exacte");
         TextArea address = new TextArea();
         address.setTextFormatter(new TextFormatter<String>(change ->
@@ -136,8 +151,8 @@ public class SetBienScreen extends Stage {
             }
         });
         superficie.setMaxWidth(150);
-        VBox left = new VBox(typeBienLabel, typeBien, propLabel, prop, addProp, typeTransLabel,
-                typeTrans, wilayaLabel, wilaya, addressLabel, address, superficieLabel, superficie);
+        VBox left = new VBox(typeBienLabel, typeBien, propLabel, prop, addProp, typeTransLabel, typeTrans, wilayaLabel,
+                wilaya, wilayaEchangeLabel, wilayaEchange, addressLabel, address, superficieLabel, superficie);
         left.setSpacing(2);
         form.addColumn(0, left);
         Label priceLabel = createMessage("Prix (DA)");
@@ -247,7 +262,7 @@ public class SetBienScreen extends Stage {
         scaffold.setCenter(form);
         scaffold.setPadding(new Insets(10));
         scaffold.setOnKeyPressed(keyEvent -> {
-            if(keyEvent.getCode().equals(KeyCode.ESCAPE)) close();
+            if (keyEvent.getCode().equals(KeyCode.ESCAPE)) close();
         });
         return new Scene(scaffold, 800, 500);
     }
@@ -267,16 +282,24 @@ public class SetBienScreen extends Stage {
         typeBien.setValue(bien.getClass().getSimpleName());
         Label propLabel = createMessage("Proprietaire");
         ChoiceBox<String> prop = new ChoiceBox<>(FXCollections.observableArrayList(bien.getProprietaire().getNom()
-                + " " + bien.getProprietaire().getPrenom() + ", Email : " + bien.getProprietaire().getEmail()));
+                + " " + bien.getProprietaire().getPrenom() + ", Tel : " + bien.getProprietaire().getTel()));
         prop.setMaxWidth(190);
         prop.setValue(bien.getProprietaire().getNom()
-                + " " + bien.getProprietaire().getPrenom() + ", Email : " + bien.getProprietaire().getEmail());
+                + " " + bien.getProprietaire().getPrenom() + ", Tel : " + bien.getProprietaire().getTel());
         Label typeTransLabel = createMessage("Type de Transaction");
         ChoiceBox<Transaction> typeTrans = new ChoiceBox<>(FXCollections.observableArrayList(Transaction.values()));
         typeTrans.setValue(bien.getNatureTransaction());
         Label wilayaLabel = createMessage("Wilaya");
         ChoiceBox<Wilaya> wilaya = new ChoiceBox<>(FXCollections.observableArrayList(Wilaya.values()));
         wilaya.setValue(bien.getWilaya());
+        Label wilayaEchangeLabel = createMessage("Wilaya Echange");
+        ChoiceBox<Wilaya> wilayaEchange = new ChoiceBox<>(FXCollections.observableArrayList(Wilaya.values()));
+        if (!bien.getNatureTransaction().equals(Transaction.ECHANGE)) wilayaEchange.setDisable(true);
+        else wilayaEchange.setValue(bien.getWilayaEchange());
+        typeTrans.valueProperty().addListener((observableValue, transaction, t1) -> {
+            if (t1.equals(Transaction.ECHANGE)) wilayaEchange.setDisable(false);
+            else wilayaEchange.setDisable(true);
+        });
         Label addressLabel = createMessage("Adresse exacte");
         TextArea address = new TextArea();
         address.setTextFormatter(new TextFormatter<String>(change ->
@@ -295,8 +318,8 @@ public class SetBienScreen extends Stage {
             }
         });
         superficie.setMaxWidth(150);
-        VBox left = new VBox(typeBienLabel, typeBien, propLabel, prop, typeTransLabel,
-                typeTrans, wilayaLabel, wilaya, addressLabel, address, superficieLabel, superficie);
+        VBox left = new VBox(typeBienLabel, typeBien, propLabel, prop, typeTransLabel, typeTrans, wilayaLabel, wilaya,
+                wilayaEchangeLabel, wilayaEchange, addressLabel, address, superficieLabel, superficie);
         left.setSpacing(2);
         form.addColumn(0, left);
         Label priceLabel = createMessage("Prix (DA)");
@@ -316,6 +339,7 @@ public class SetBienScreen extends Stage {
         descriptif.setWrapText(true);
         descriptif.setPrefColumnCount(200);
         descriptif.setPrefRowCount(4);
+        descriptif.setDisable(false);
         if (bien.getClass().getSimpleName().equals("Appartement")) {
             Label estMeubleLabel = createMessage("Meublé ? ");
             ChoiceBox<String> estMeuble = new ChoiceBox<>(FXCollections.observableArrayList("Oui", "Non"));
@@ -352,6 +376,68 @@ public class SetBienScreen extends Stage {
                     duplexAscenseurBox, descriptifLabel, descriptif);
             right.setSpacing(2);
             form.addColumn(1, right);
+            Button saveBien = new Button("Save bien");
+            HBox bottom = new HBox(saveBien);
+            bottom.setAlignment(Pos.CENTER_RIGHT);
+            scaffold.setBottom(bottom);
+            saveBien.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+            saveBien.setPrefSize(200, 40);
+            saveBien.setOnAction(new EventHandler<>() {
+                private void checkDuplexException() throws DuplexException {
+                    if (isDuplex.getValue().equals("Oui") && nbPiecesSpinner.getValue() < 2) {
+                        throw new DuplexException();
+                    }
+                }
+
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    Service<Void> service = new AddPropScreen.ProcessService();
+                    if (!service.isRunning()) {
+                        service.start();
+                    }
+                    Label checkInfoLabel = createMessage("Check bien informations again!");
+                    checkInfoLabel.setTextFill(Color.RED);
+                    Label succeededLabel = createMessage("Bien Modified");
+                    succeededLabel.setTextFill(Color.GREEN);
+                    if (address.getText().isEmpty() || superficie.getText().isEmpty() || Float.parseFloat(superficie.getText()) > 999999 ||
+                            price.getText().isEmpty()  || Double.parseDouble(price.getText()) == 0.0) {
+                        if (bottom.getChildren().size() > 1) bottom.getChildren().remove(1);
+                        bottom.getChildren().add(checkInfoLabel);
+                        bottom.setSpacing(10);
+                    } else {
+                        try {
+                            checkDuplexException();
+                            bien.setAdresseExacte(address.getText());
+                            bien.setWilaya(wilaya.getValue());
+                            bien.setSuperficie(Float.parseFloat(superficie.getText()));
+                            bien.setNatureTransaction(typeTrans.getValue());
+                            bien.setPrix(Double.parseDouble(price.getText()));
+                            bien.setPrixNegociable(prixNegociable.getValue().equals("Oui"));
+                            bien.setDescriptif(descriptif.getText());
+                            ((Habitable) bien).setNbPieces(nbPiecesSpinner.getValue());
+                            ((Habitable) bien).setEstMeuble(estMeuble.getValue().equals("Oui"));
+                            ((Appartement) bien).setEtage(etageSpinner.getValue());
+                            ((Appartement) bien).setDuplex(isDuplex.getValue().equals("Oui"));
+                            ((Appartement) bien).setHasAscenseur(hasAscenseur.getValue().equals("Oui"));
+                            if (typeTrans.getValue().equals(Transaction.ECHANGE)) {
+                                bien.setWilayaEchange(wilayaEchange.getValue());
+                            }
+                            if (bottom.getChildren().size() > 1) bottom.getChildren().remove(1);
+                            bottom.getChildren().add(succeededLabel);
+                            bottom.setSpacing(10);
+                            service.setOnSucceeded(e -> {
+                                SetBienScreen.this.close();
+                                service.reset();
+                            });
+                        } catch (DuplexException e) {
+                            System.err.println("ImmoESI" + LocalDateTime.now().toString() + ": Duplex Exception Captured");
+                            if (bottom.getChildren().size() > 1) bottom.getChildren().remove(1);
+                            bottom.getChildren().add(checkInfoLabel);
+                            bottom.setSpacing(10);
+                        }
+                    }
+                }
+            });
         } else if (bien.getClass().getSimpleName().equals("Maison")) {
             Label estMeubleLabel = createMessage("Meublé ? ");
             ChoiceBox<String> estMeuble = new ChoiceBox<>(FXCollections.observableArrayList("Oui", "Non"));
@@ -403,6 +489,70 @@ public class SetBienScreen extends Stage {
                     descriptifLabel, descriptif);
             right.setSpacing(2);
             form.addColumn(1, right);
+            Button saveBien = new Button("Save bien");
+            HBox bottom = new HBox(saveBien);
+            bottom.setAlignment(Pos.CENTER_RIGHT);
+            scaffold.setBottom(bottom);
+            saveBien.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+            saveBien.setPrefSize(200, 40);
+            saveBien.setOnAction(new EventHandler<ActionEvent>() {
+                private void checkSuperficieException() throws SuperficieException {
+                    if (Float.parseFloat(superficie.getText()) < Float.parseFloat(superficieHabitable.getText())) throw
+                            new SuperficieException();
+                }
+
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    Service<Void> service = new AddPropScreen.ProcessService();
+                    if (!service.isRunning()) {
+                        service.start();
+                    }
+                    Label checkInfoLabel = createMessage("Check bien informations again!");
+                    checkInfoLabel.setTextFill(Color.RED);
+                    Label succeededLabel = createMessage("Bien Modified");
+                    succeededLabel.setTextFill(Color.GREEN);
+                    if (address.getText().isEmpty() || superficie.getText().isEmpty() || Float.parseFloat(superficie.getText()) > 999999
+                            || superficieHabitable.getText().isEmpty() || Float.parseFloat(superficieHabitable.getText()) > 999999 ||
+                            price.getText().isEmpty() || Double.parseDouble(price.getText()) == 0.0) {
+                        if (bottom.getChildren().size() > 1) bottom.getChildren().remove(1);
+                        bottom.getChildren().add(checkInfoLabel);
+                        bottom.setSpacing(10);
+                    } else {
+                        try {
+                            checkSuperficieException();
+                            bien.setAdresseExacte(address.getText());
+                            bien.setWilaya(wilaya.getValue());
+                            bien.setSuperficie(Float.parseFloat(superficie.getText()));
+                            bien.setNatureTransaction(typeTrans.getValue());
+                            bien.setPrix(Double.parseDouble(price.getText()));
+                            bien.setPrixNegociable(prixNegociable.getValue().equals("Oui"));
+                            bien.setDescriptif(descriptif.getText());
+                            ((Habitable) bien).setNbPieces(nbPiecesSpinner.getValue());
+                            ((Habitable) bien).setEstMeuble(estMeuble.getValue().equals("Oui"));
+                            ((Maison) bien).setNbEtages(nbEtagesSpinner.getValue());
+                            ((Maison) bien).setHasGarage(hasGarage.getValue().equals("Oui"));
+                            ((Maison) bien).setHasJardin(hasJardin.getValue().equals("Oui"));
+                            ((Maison) bien).setHasPiscine(hasPiscine.getValue().equals("Oui"));
+                            ((Maison) bien).setSuperficieHabitable(Float.parseFloat(superficieHabitable.getText()));
+                            if (typeTrans.getValue().equals(Transaction.ECHANGE)) {
+                                bien.setWilayaEchange(wilayaEchange.getValue());
+                            }
+                            if (bottom.getChildren().size() > 1) bottom.getChildren().remove(1);
+                            bottom.getChildren().add(succeededLabel);
+                            bottom.setSpacing(10);
+                            service.setOnSucceeded(e -> {
+                                SetBienScreen.this.close();
+                                service.reset();
+                            });
+                        } catch (SuperficieException e) {
+                            System.err.println("ImmoESI" + LocalDateTime.now().toString() + ": Superficie Exception Captured");
+                            if (bottom.getChildren().size() > 1) bottom.getChildren().remove(1);
+                            bottom.getChildren().add(checkInfoLabel);
+                            bottom.setSpacing(10);
+                        }
+                    }
+                }
+            });
         } else {
             Label statutJuridiqueLabel = createMessage("Statut Juridique");
             TextField statutJuridique = new TextField();
@@ -417,11 +567,56 @@ public class SetBienScreen extends Stage {
                     nbFacadesLabel, nbFacadesSpinner, descriptifLabel, descriptif);
             right.setSpacing(2);
             form.addColumn(1, right);
+            Button saveBien = new Button("Save bien");
+            HBox bottom = new HBox(saveBien);
+            bottom.setAlignment(Pos.CENTER_RIGHT);
+            scaffold.setBottom(bottom);
+            saveBien.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+            saveBien.setPrefSize(200, 40);
+            saveBien.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    Service<Void> service = new AddPropScreen.ProcessService();
+                    if (!service.isRunning()) {
+                        service.start();
+                    }
+                    Label checkInfoLabel = createMessage("Check bien informations again!");
+                    checkInfoLabel.setTextFill(Color.RED);
+                    Label succeededLabel = createMessage("Bien Modified");
+                    succeededLabel.setTextFill(Color.GREEN);
+                    if (address.getText().isEmpty() || superficie.getText().isEmpty() || Float.parseFloat(superficie.getText()) > 999999 ||
+                            price.getText().isEmpty() || Double.parseDouble(price.getText()) == 0.0) {
+                        if (bottom.getChildren().size() > 1) bottom.getChildren().remove(1);
+                        bottom.getChildren().add(checkInfoLabel);
+                        bottom.setSpacing(10);
+                    } else {
+                        bien.setAdresseExacte(address.getText());
+                        bien.setWilaya(wilaya.getValue());
+                        bien.setSuperficie(Float.parseFloat(superficie.getText()));
+                        bien.setNatureTransaction(typeTrans.getValue());
+                        bien.setPrix(Double.parseDouble(price.getText()));
+                        bien.setPrixNegociable(prixNegociable.getValue().equals("Oui"));
+                        bien.setDescriptif(descriptif.getText());
+                        ((Terrain) bien).setNbFacades(nbFacadesSpinner.getValue());
+                        ((Terrain) bien).setStatutJuridique(statutJuridique.getText());
+                        if (typeTrans.getValue().equals(Transaction.ECHANGE)) {
+                            bien.setWilayaEchange(wilayaEchange.getValue());
+                        }
+                        if (bottom.getChildren().size() > 1) bottom.getChildren().remove(1);
+                        bottom.getChildren().add(succeededLabel);
+                        bottom.setSpacing(10);
+                        service.setOnSucceeded(e -> {
+                            SetBienScreen.this.close();
+                            service.reset();
+                        });
+                    }
+                }
+            });
         }
         scaffold.setCenter(form);
         scaffold.setPadding(new Insets(10));
         scaffold.setOnKeyPressed(keyEvent -> {
-            if(keyEvent.getCode().equals(KeyCode.ESCAPE)) close();
+            if (keyEvent.getCode().equals(KeyCode.ESCAPE)) close();
         });
         return new Scene(scaffold, 800, 500);
     }
@@ -489,4 +684,30 @@ public class SetBienScreen extends Stage {
         };
         return new TextFormatter<Double>(converter, 0.0, filter);
     }
+
+    static class ProcessService extends Service<Void> {
+
+        @Override
+        protected Task<Void> createTask() {
+            return new Task<Void>() {
+
+                @Override
+                protected Void call() throws Exception { // Computations takes 0.7
+                    Thread.sleep(1300);
+                    return null;
+                }
+            };
+        }
+    }
 }
+
+/*
+    Proprietaire proprietaire = null;
+    String[] strings = prop.getValue().split(", Tel : ");
+    String tel = strings[1].strip();
+                            for (Proprietaire p : ImmoESI.getListProprietaires()) {
+                                    if (p.getTel().equals(tel)) {
+                                    proprietaire = p;
+                                    break;
+                                    }
+                                    }*/
